@@ -11,7 +11,7 @@ export default function ContactPage(){
       </header>
       <ContactForm />
       <div className="pt-6 border-t border-cyan-500/20 text-sm">
-        <p>Prefer direct comms? <a href="mailto:contact@roguesalad.example" className="text-cyan-300 underline">contact@roguesalad.example</a></p>
+        <p>Prefer direct comms? <a href="mailto:riley@roguesalad.co" className="text-cyan-300 underline">riley@roguesalad.co</a></p>
       </div>
     </div>
   );
