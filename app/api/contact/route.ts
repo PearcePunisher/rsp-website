@@ -24,16 +24,34 @@ export async function POST(req: NextRequest) {
       ip: ip || undefined,
     };
     await insertLead(lead);
-    // Fire-and-forget email sending; don't block response if email fails
-    (async()=>{
-      try {
-        await sendOwnerNotification(lead);
-        await sendCustomerReceipt(lead);
-      } catch (e) {
-        console.error('[contact] email send failed', e);
-      }
-    })();
-    return NextResponse.json({ ok: true, message: 'Submitted' });
+    let ownerOk = false; let customerOk = false;
+    try {
+      const ownerPayload = {
+        name: lead.name,
+        email: lead.email,
+        company: lead.company,
+        budget: lead.budget,
+        message: lead.message,
+      };
+      await sendOwnerNotification(ownerPayload);
+      ownerOk = true;
+    } catch(e) {
+      console.error('[contact] owner email failed', e);
+    }
+    try {
+      const customerPayload = {
+        name: lead.name,
+        email: lead.email,
+        company: lead.company,
+        budget: lead.budget,
+        message: lead.message,
+      };
+      await sendCustomerReceipt(customerPayload);
+      customerOk = true;
+    } catch(e) {
+      console.error('[contact] customer receipt failed', e);
+    }
+    return NextResponse.json({ ok: true, ownerOk, customerOk });
   } catch (err) {
     console.error('[contact] error', err instanceof Error ? err.message : err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
