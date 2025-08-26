@@ -1,6 +1,7 @@
 import { projects } from "../../(data)/projects";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Props { params: Promise<{ slug: string }> }
 
@@ -28,11 +29,16 @@ export default async function ProjectPage({ params }: Props) {
           {project.tags.map(tag => <li key={tag}>{tag}</li>)}
         </ul>
       </header>
-      {project.videoUrl ? (
-        <div className="aspect-video w-full panel rounded-md" aria-label="Video placeholder" />
-      ) : (
-        <div className="aspect-video w-full panel rounded-md" aria-label="Image placeholder" />
-      )}
+      <div className="relative aspect-video w-full panel rounded-md overflow-hidden" aria-label="Project cover image">
+        <Image
+          src={project.coverImage}
+          alt={project.title}
+          fill
+          className="object-cover"
+          priority={false}
+          sizes="(max-width: 768px) 100vw, 80vw"
+        />
+      </div>
       {project.caseStudy && (
         <div className="grid md:grid-cols-3 gap-8 text-sm text-slate-300">
           <div>
@@ -47,6 +53,18 @@ export default async function ProjectPage({ params }: Props) {
             <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">OUTCOME</h2>
             <p>{project.caseStudy.outcome}</p>
           </div>
+        </div>
+      )}
+      {project.siteUrl && (
+        <div className="pt-2">
+          <a
+            href={project.siteUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn text-sm"
+          >
+            Visit Website ↗
+          </a>
         </div>
       )}
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">

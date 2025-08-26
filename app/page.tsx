@@ -1,6 +1,7 @@
 import { projects } from "./(data)/projects";
 import SectionHeader from "./components/SectionHeader";
 import Link from "next/link";
+import Image from "next/image";
 
 export default function Home(){
   const featured = projects.slice(0,6);
@@ -29,7 +30,16 @@ export default function Home(){
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map(p => (
             <Link key={p.slug} href={`/work/${p.slug}`} className="panel brackets rounded-md p-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
-              <div className="aspect-video w-full mb-3 bg-slate-800/40 rounded-sm" aria-hidden />
+              <div className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden" aria-hidden>
+                <Image
+                  src={p.coverImage}
+                  alt={p.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={false}
+                />
+              </div>
               <h3 className="text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors">{p.title}</h3>
               <p className="text-xs text-slate-400 mt-1 line-clamp-2">{p.summary}</p>
               <ul className="flex flex-wrap gap-2 mt-3 text-[10px] tracking-wide text-cyan-300/80">
@@ -47,9 +57,9 @@ export default function Home(){
         <SectionHeader label="Capabilities" title="Services" intro="Core disciplines we deploy to execute stealth-clear visuals." />
         <div className="grid gap-8 md:grid-cols-3">
           {[
-            {title:"Filmmaking", body:"End-to-end production with an emphasis on composition, cadence, and narrative minimalism."},
-            {title:"Editing", body:"Precision timing and rhythm that maintains tension and eliminates visual noise."},
-            {title:"Motion Graphics", body:"FUI & typographic systems that feel functional, lean, and tactically purposeful."},
+            {title:"Web Development", body:"I have over 7 years of experience in building responsive and accessible websites using modern frameworks and best practices."},
+            {title:"Design", body:"I work with clients to create visually stunning and user-friendly interfaces that enhance the overall user experience."},
+            {title:"Consulting", body:"If you don't need a full-time designer or developer, I offer consulting services to help you define your project goals and create a roadmap for success."},
           ].map(s => (
             <div key={s.title} className="panel rounded-md p-6 brackets">
               <h3 className="font-display text-lg tracking-wide mb-2 text-cyan-300">{s.title}</h3>
