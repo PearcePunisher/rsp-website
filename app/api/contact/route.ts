@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { insertLead } from '@/lib/db';
+import { sendOwnerNotification, sendCustomerReceipt } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   try {
@@ -13,7 +14,7 @@ export async function POST(req: NextRequest) {
     }
     const forwarded = req.headers.get('x-forwarded-for') || '';
     const ip = forwarded.split(',')[0]?.trim();
-    await insertLead({
+    const lead = {
       name: String(name).slice(0,200),
       email: String(email).toLowerCase().slice(0,320),
       company: company ? String(company).slice(0,200) : undefined,
@@ -21,8 +22,18 @@ export async function POST(req: NextRequest) {
       message: String(message).slice(0,4000),
       userAgent: req.headers.get('user-agent') || undefined,
       ip: ip || undefined,
-    });
-    return NextResponse.json({ ok: true });
+    };
+    await insertLead(lead);
+    // Fire-and-forget email sending; don't block response if email fails
+    (async()=>{
+      try {
+        await sendOwnerNotification(lead);
+        await sendCustomerReceipt(lead);
+      } catch (e) {
+        console.error('[contact] email send failed', e);
+      }
+    })();
+    return NextResponse.json({ ok: true, message: 'Submitted' });
   } catch (err) {
     console.error('[contact] error', err instanceof Error ? err.message : err);
     return NextResponse.json({ error: 'Server error' }, { status: 500 });
