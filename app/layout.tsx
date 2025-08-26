@@ -16,6 +16,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.roguesalad.example"),
   title: {
     default: "Rogue Salad Productions",
     template: "%s | Rogue Salad Productions",

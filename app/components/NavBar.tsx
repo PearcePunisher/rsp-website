@@ -1,5 +1,6 @@
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion } from "framer-motion";
 import ScrambleText from "@/app/components/ScrambleText";
@@ -14,10 +15,18 @@ const links = [
 export default function NavBar() {
   const pathname = usePathname();
   return (
-    <header className="sticky top-0 z-40 backdrop-blur-md bg-black/60 border-b border-cyan-500/20">
+    <header className="sticky top-0 z-40 backdrop-blur-md bg-[#060b0f]/80 border-b border-cyan-500/20 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.6)]">
       <nav className="container-max h-14 flex items-center justify-between">
-        <Link href="/" className="font-display text-xl tracking-widest">
-          <span className="text-cyan-300 font-semibold">ROGUE</span> SALAD
+        <Link href="/" className="flex items-center h-full" aria-label="Rogue Salad Productions Home">
+          <span className="inline-flex items-center py-1 px-3 rounded-sm bg-[#22D3EE] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_0_8px_-2px_rgba(34,211,238,0.6)]">
+            <Image
+              src="/rsp-logo.png"
+              alt="Rogue Salad Productions"
+              width={240}
+              height={52}
+              priority
+              className="h-8 w-auto object-contain mix-blend-multiply" />
+          </span>
         </Link>
         <ul className="flex items-center gap-8 text-sm tracking-wide uppercase">
           {links.map(l => {
