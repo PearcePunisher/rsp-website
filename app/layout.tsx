@@ -19,18 +19,18 @@ const inter = Inter({
 
 export const metadata: Metadata = {
   metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "https://www.roguesalad.example"
+    process.env.NEXT_PUBLIC_SITE_URL || "https://roguesalad.co"
   ),
   title: {
     default: "Rogue Salad Productions",
     template: "%s | Rogue Salad Productions",
   },
   description:
-    "Tactical creative studio: filmmaking, editing, motion graphics.",
+    "Tactical creative studio: Web Design, Development, and Strategy.",
   openGraph: {
     title: "Rogue Salad Productions",
     description: "Tactical creative. Clean visuals. Zero noise.",
-    url: "https://www.roguesalad.example", // placeholder
+    url: "https://roguesalad.co", // placeholder
     siteName: "Rogue Salad Productions",
     images: [
       {
