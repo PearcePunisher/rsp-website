@@ -12,7 +12,7 @@ export default function Footer(){
           <span>STATUS: LINK ESTABLISHED</span>
         </div>
         <div className="flex gap-6">
-          <Link href="mailto:contact@roguesalad.example" className="hover:text-cyan-300">Email</Link>
+          <Link href="mailto:contact@roguesalad.co" className="hover:text-cyan-300">Email</Link>
           <Link href="https://instagram.com" className="hover:text-cyan-300">Instagram</Link>
           <Link href="/privacy" className="hover:text-cyan-300">Privacy</Link>
           <Link href="https://billing.stripe.com/p/login/4gMaEZdxb67egaN13A87K00" target="_blank" className="hover:text-cyan-300">Billing</Link>
