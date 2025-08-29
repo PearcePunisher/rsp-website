@@ -17,7 +17,7 @@ export default function Footer(){
           <Link href="/privacy" className="hover:text-cyan-300">Privacy</Link>
           <Link href="https://billing.stripe.com/p/login/4gMaEZdxb67egaN13A87K00" target="_blank" className="hover:text-cyan-300">Billing</Link>
         </div>
-        <p className="md:text-right">© {new Date().getFullYear()} Rogue Salad Productions</p>
+        <p className="md:text-right">© {new Date().getFullYear()} Rogue Salad Productions - Kept you waiting, huh?</p>
       </div>
     </footer>
   );

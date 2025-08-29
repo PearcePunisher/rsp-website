@@ -3,7 +3,8 @@ import { Orbitron, Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import { Analytics } from "@vercel/analytics/next"
+import { Analytics } from "@vercel/analytics/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const orbitron = Orbitron({
   variable: "--font-display",
@@ -17,7 +18,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.roguesalad.example"),
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://www.roguesalad.example"
+  ),
   title: {
     default: "Rogue Salad Productions",
     template: "%s | Rogue Salad Productions",
@@ -60,6 +63,7 @@ export default function RootLayout({
     <html lang="en" className="bg-black text-white">
       <body
         className={`${orbitron.variable} ${inter.variable} font-sans antialiased min-h-screen flex flex-col`}>
+        <GoogleAnalytics gaId="G-R6S3LW3CJB" />
         <NavBar />
         <main className="flex-1">{children}</main>
         <Footer />
