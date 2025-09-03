@@ -1,17 +1,35 @@
 "use client";
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [attribution, setAttribution] = useState<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_path?: string; raw_query?: string }>({});
+  const captured = useRef(false);
+  useEffect(() => {
+    if (captured.current) return; // only run once on mount
+    captured.current = true;
+    try {
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+      const utm_source = params.get('utm_source') || undefined;
+      const utm_medium = params.get('utm_medium') || undefined;
+      const utm_campaign = params.get('utm_campaign') || undefined;
+      const raw_query = url.search || undefined;
+      const landing_path = url.pathname;
+      const referrer = document.referrer || undefined;
+      setAttribution({ utm_source, utm_medium, utm_campaign, raw_query, landing_path, referrer });
+    } catch {}
+  }, []);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(undefined);
     setLoading(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
-    const payload = Object.fromEntries(formData.entries());
+  type Payload = Record<string, FormDataEntryValue | string | undefined>;
+  const payload: Payload = { ...Object.fromEntries(formData.entries()), ...attribution };
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
@@ -69,17 +87,32 @@ export default function ContactForm() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-2">
-        <label
-          htmlFor="company"
-          className="text-xs tracking-wider text-cyan-300">
-          COMPANY
-        </label>
-        <input
-          id="company"
-          name="company"
-          className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
-        />
+      <div className="grid gap-6 md:grid-cols-2">
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="phone"
+            className="text-xs tracking-wider text-cyan-300">
+            PHONE
+          </label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+        </div>
+        <div className="flex flex-col gap-2">
+          <label
+            htmlFor="company"
+            className="text-xs tracking-wider text-cyan-300">
+            COMPANY
+          </label>
+          <input
+            id="company"
+            name="company"
+            className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          />
+        </div>
       </div>
       <div className="flex flex-col gap-2">
         <label

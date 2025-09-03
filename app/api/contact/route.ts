@@ -4,7 +4,7 @@ import { sendOwnerNotification, sendCustomerReceipt } from '@/lib/email';
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+  const body = await req.json();
     const { name, email, company, budget, message } = body || {};
     if(!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
@@ -14,6 +14,8 @@ export async function POST(req: NextRequest) {
     }
     const forwarded = req.headers.get('x-forwarded-for') || '';
     const ip = forwarded.split(',')[0]?.trim();
+    const url = new URL(req.url);
+    const sp = url.searchParams;
     const lead = {
       name: String(name).slice(0,200),
       email: String(email).toLowerCase().slice(0,320),
@@ -22,6 +24,12 @@ export async function POST(req: NextRequest) {
       message: String(message).slice(0,4000),
       userAgent: req.headers.get('user-agent') || undefined,
       ip: ip || undefined,
+      utm_source: sp.get('utm_source')?.slice(0,100) || undefined,
+      utm_medium: sp.get('utm_medium')?.slice(0,100) || undefined,
+      utm_campaign: sp.get('utm_campaign')?.slice(0,150) || undefined,
+      referrer: req.headers.get('referer')?.slice(0,500) || undefined,
+      landing_path: url.pathname.slice(0,500),
+      raw_query: url.search.slice(0,1000) || undefined,
     };
     await insertLead(lead);
     let ownerOk = false; let customerOk = false;
