@@ -20,6 +20,19 @@ export default async function ProjectPage({ params }: Props) {
   const { slug } = await params;
   const project = projects.find(p => p.slug === slug);
   if(!project) notFound();
+  let outboundHref: string | undefined = undefined;
+  if (project.siteUrl) {
+    try {
+      const u = new URL(project.siteUrl);
+      // UTM parameters: update source/medium/campaign as desired
+      u.searchParams.set('utm_source', 'roguesalad.co');
+      u.searchParams.set('utm_medium', 'referral');
+      u.searchParams.set('utm_campaign', project.slug);
+      outboundHref = u.toString();
+    } catch (e) {
+      outboundHref = project.siteUrl;
+    }
+  }
   return (
     <article className="container-max py-16 space-y-10">
       <header>
@@ -55,12 +68,13 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         </div>
       )}
-      {project.siteUrl && (
+      {outboundHref && (
         <div className="pt-2">
           <a
-            href={project.siteUrl}
+            href={outboundHref}
             target="_blank"
-            rel="noopener noreferrer"
+            rel="noopener"
+            referrerPolicy="strict-origin-when-cross-origin"
             className="btn text-sm"
           >
             Visit Website ↗

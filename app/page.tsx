@@ -8,7 +8,7 @@ export const metadata = {
   description: "Rogue Salad Productions builds fast, accessible, SEO-friendly websites and interfaces. Specialties: Next.js front-ends, WordPress implementation, performance optimization, UI/UX design, and technical consulting for startups and agencies.",
   openGraph: {
     title: "Rogue Salad Productions — Fast, Accessible Web Development",
-  description: "WordPress (Oxygen) and Next.js websites and performance-first front-ends. Case studies, services, and consulting for product teams and founders.",
+    description: "WordPress (Oxygen) and Next.js websites and performance-first front-ends. Case studies, services, and consulting for product teams and founders.",
     images: ["/rsp-logo.png"],
   },
 };
@@ -22,8 +22,8 @@ const ldJson = {
   logo: "/rsp-logo.png",
 };
 
-export default function Home(){
-  const featured = projects.slice(0,6);
+export default function Home() {
+  const featured = projects.slice(0, 6);
   return (
     <div className="space-y-28 pb-32">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }} />
@@ -34,8 +34,7 @@ export default function Home(){
             <span className="block text-cyan-300">ROGUE SALAD PRODUCTIONS</span>
             Freelance Web Development & Design
           </h1>
-          <p className="mt-6 text-slate-400 max-w-prose">Performance-first, accessible, and SEO-friendly websites built with Next.js — for startups, agencies, and product teams.</p>
-                <p className="mt-6 text-slate-400 max-w-prose">Performance-first, accessible, and SEO-friendly websites built on platforms like WordPress (Oxygen) or Next.js — or tailored to your preferred stack for startups, agencies, and product teams.</p>
+          <p className="mt-6 text-slate-400 max-w-prose">Performance-first, accessible, and SEO-friendly websites built on platforms like WordPress (Oxygen) or Next.js — or tailored to your preferred stack for startups, agencies, and product teams.</p>
           <div className="mt-8 flex flex-wrap gap-4">
             <Link href="/work" className="btn" aria-label="Portfolio — Case studies and results">Portfolio — Case Studies</Link>
             <Link href="/contact" className="btn" aria-label="Hire a web developer, request a quote">Hire a Web Developer — Get a Quote</Link>
@@ -47,8 +46,7 @@ export default function Home(){
       </section>
       {/* Featured Work */}
       <section className="container-max" aria-labelledby="featured-work-heading">
-        <SectionHeader label="Module" title="Featured Work" intro="Selected case studies: performance-focused websites and digital products built with Next.js, accessibility-first UX, and measurable results." />
-    <SectionHeader label="Module" title="Featured Work" intro="Selected case studies: performance-focused websites and digital products built with WordPress (Oxygen), Next.js, or other modern platforms, accessibility-first UX, and measurable results." />
+        <SectionHeader label="Module" title="Featured Work" intro="Selected case studies: performance-focused websites and digital products built with WordPress (Oxygen), Next.js, or other modern platforms, accessibility-first UX, and measurable results." />
         <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map(p => (
             <Link key={p.slug} href={`/work/${p.slug}`} className="panel brackets rounded-md p-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
@@ -65,7 +63,7 @@ export default function Home(){
               <h3 className="text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors">{p.title}</h3>
               <p className="text-xs text-slate-400 mt-1 line-clamp-2">{p.summary}</p>
               <ul className="flex flex-wrap gap-2 mt-3 text-[10px] tracking-wide text-cyan-300/80">
-                {p.tags.slice(0,3).map(t => <li key={t}>{t}</li>)}
+                {p.tags.slice(0, 3).map(t => <li key={t}>{t}</li>)}
               </ul>
             </Link>
           ))}
@@ -79,10 +77,9 @@ export default function Home(){
         <SectionHeader label="Capabilities" title="Services" intro="Core disciplines we deploy to execute stealth-clear visuals." />
         <div className="grid gap-8 md:grid-cols-3">
           {[
-            {title:"Web Development", body:"Next.js & React development — responsive, SEO-minded front-ends, performance optimization, and CMS integrations."},
-              {title:"Web Development", body:"WordPress (Oxygen), Next.js & React development — responsive, SEO-minded front-ends, performance optimization, and CMS integrations. Able to build on the platform you prefer."},
-            {title:"Design", body:"UI/UX design and prototyping — visually clear interfaces focused on usability, conversions, and brand consistency."},
-            {title:"Consulting", body:"Technical & product consulting — architecture reviews, SEO & accessibility audits, and roadmaps to scale your web product."},
+            { title: "Web Development", body: "WordPress (Oxygen), Next.js & React development — responsive, SEO-minded front-ends, performance optimization, and CMS integrations. Able to build on the platform you prefer." },
+            { title: "Design", body: "UI/UX design and prototyping — visually clear interfaces focused on usability, conversions, and brand consistency." },
+            { title: "Consulting", body: "Technical & product consulting — architecture reviews, SEO & accessibility audits, and roadmaps to scale your web product." },
           ].map(s => (
             <div key={s.title} className="panel rounded-md p-6 brackets">
               <h3 className="font-display text-lg tracking-wide mb-2 text-cyan-300">{s.title}</h3>
@@ -96,10 +93,22 @@ export default function Home(){
         <SectionHeader label="Intel" title="About" intro="About — Principles & process for building clear, fast, and accessible web experiences. Learn how we plan projects, prioritize performance, and measure success." />
         <div className="grid md:grid-cols-2 gap-10 items-start">
           <div className="space-y-4 text-sm text-slate-300 max-w-prose">
-            <p>We operate with a signal vs noise mindset. Every frame must justify its presence. No ornamental overload—just purposeful design and edit decisions supporting narrative clarity.</p>
+            <p>I’m Riley Pearce, a senior web developer with a passion for building clean, modern, and high-performing websites. With years of experience in front-end development, I specialize in Next.js, WordPress (including Oxygen and Elementor), GraphQL, and Tailwind CSS. My focus is always on creating fast, accessible, and scalable solutions that enhance user experience while delivering measurable results for businesses.</p>
+            <p>Beyond coding, I bring expertise in UI/UX optimization, e-commerce integration, and custom plugin development, ensuring every project is tailored to meet unique business goals. From managing complex content systems to crafting intuitive interfaces, I thrive on solving technical challenges with creative, practical solutions. Whether it’s custom web applications, dynamic WordPress builds, or seamless API integrations, I deliver projects that combine technical precision with thoughtful design.</p>
             <p><Link href="/about" className="text-cyan-300 underline">About — Principles & Process →</Link></p>
           </div>
-          <div className="aspect-[4/3] rounded-md panel" aria-label="Abstract silhouette placeholder" />
+          <div className="relative aspect-[4/3] rounded-md panel overflow-hidden" aria-label="Portrait of Riley Pearce">
+            <Image
+              src="/riley-4-3.webp"
+              alt="Riley Pearce — portrait"
+              fill
+              className="object-cover filter grayscale contrast-95"
+              priority={false}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            {/* subtle cyan wash to match site tone; remove if you prefer pure b/w */}
+            <div className="absolute inset-0 bg-cyan-300/6 mix-blend-screen pointer-events-none" aria-hidden />
+          </div>
         </div>
       </section>
     </div>
