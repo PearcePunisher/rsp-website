@@ -13,8 +13,9 @@ function firstNameParam(name?: string | null) {
   return cleaned.split(/\s+/)[0].replace(/[^\p{L}\p{N}'-]/gu,'');
 }
 
-export default function ThankYouPage({ searchParams }: { searchParams: { name?: string } }) {
-  const fname = firstNameParam(searchParams.name);
+export default async function ThankYouPage({ searchParams }: { searchParams: Promise<{ name?: string }> }) {
+  const { name } = await searchParams;
+  const fname = firstNameParam(name);
   return (
     <div className="container-max py-16 space-y-10 max-w-2xl">
       <header className="space-y-3">
