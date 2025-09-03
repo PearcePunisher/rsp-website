@@ -1,4 +1,4 @@
-// Removed unused lucide-react Link import
+import Image from "next/image";
 
 export const metadata = { title: "About" };
 
@@ -173,16 +173,29 @@ export default function AboutPage() {
       {/* Cats Section */}
       <section className="space-y-8 pt-4">
         <h2 className="text-cyan-300 font-display text-sm tracking-widest">CATS: RIPLEY & VOID</h2>
-        <p className="text-slate-400 text-sm max-w-prose">Mission support felines. God&apos;s perfect creation.</p>
+        <p className="text-slate-400 text-sm max-w-prose">Mission support felines. A weapon to surpass Metal Gear.</p>
         <div className="grid md:grid-cols-2 gap-8">
           {/* Ripley */}
           <div className="panel rounded-md p-5 space-y-4 brackets">
-            <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-slate-800/40 flex items-center justify-center text-slate-500 text-xs">
-              <span>Ripley Photo Placeholder</span>
-            </div>
+          <div
+            className="relative aspect-[4/3] rounded-md panel overflow-hidden"
+            aria-label="Photo of Ripley the cat">
+            <Image
+              src="/Cats/ripley-dnd.webp"
+              alt="Ripley standing in front of a GM Screen for the ALIEN RPG."
+              fill
+              className="object-cover"
+              priority={false}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div
+              className="absolute inset-0 bg-cyan-300/6 mix-blend-screen pointer-events-none"
+              aria-hidden
+            />
+          </div>
             <div className="space-y-2">
               <h3 className="font-display tracking-wide text-lg text-cyan-300">Ripley</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">Ripley description goes here. Add personality notes, quirks, operational specialties (e.g. keyboard supervision, late‑night code review assistance).</p>
+              <p className="text-sm text-slate-300 leading-relaxed">Ripley is, for all intents and purposes, a baby. She loves being held and cuddled, and she has a particular fondness for warm laps and soft blankets. She is a phenomenal coding companion and often provides moral support during late-night coding sessions. And yes, her namesake comes from the 1979 film &quot;ALIEN.&quot;</p>
               <a
                 href="https://donate.stripe.com/3cI4gB8cR3Z6f6J3bI87K01"
                 target="_blank"
@@ -196,12 +209,25 @@ export default function AboutPage() {
           </div>
           {/* Void */}
           <div className="panel rounded-md p-5 space-y-4 brackets">
-            <div className="relative aspect-[4/3] w-full rounded-sm overflow-hidden bg-slate-800/40 flex items-center justify-center text-slate-500 text-xs">
-              <span>Void Photo Placeholder</span>
-            </div>
+          <div
+            className="relative aspect-[4/3] rounded-md panel overflow-hidden"
+            aria-label="Photo of Void the cat">
+            <Image
+              src="/Cats/Void.webp"
+              alt="Void Laying in front of a keyboard"
+              fill
+              className="object-cover"
+              priority={false}
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+            <div
+              className="absolute inset-0 bg-cyan-300/6 mix-blend-screen pointer-events-none"
+              aria-hidden
+            />
+          </div>
             <div className="space-y-2">
               <h3 className="font-display tracking-wide text-lg text-cyan-300">Void</h3>
-              <p className="text-sm text-slate-300 leading-relaxed">Void description goes here. Add stealth attributes, preferred ambient lighting conditions, and any treat biases.</p>
+              <p className="text-sm text-slate-300 leading-relaxed">The Void will regularly take advantage of her fur coloring to blend in with the shadows. She is, without a doubt, the loudest and most vocal cat I&apos;ve ever had the pleasure of knowing. She&apos;s incredibly soft and has a knack for finding the coziest spots in the house.</p>
               <a
                 href="https://donate.stripe.com/3cI4gB8cR3Z6f6J3bI87K01"
                 target="_blank"
