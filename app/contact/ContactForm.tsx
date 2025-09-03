@@ -1,10 +1,12 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const router = useRouter();
   const [attribution, setAttribution] = useState<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_path?: string; raw_query?: string }>({});
   const captured = useRef(false);
   useEffect(() => {
@@ -23,6 +25,12 @@ export default function ContactForm() {
     } catch {}
   }, []);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    function firstName(full?: string) {
+      if (!full) return undefined;
+      const cleaned = String(full).trim();
+      if (!cleaned) return undefined;
+      return cleaned.split(/\s+/)[0].replace(/[^\p{L}\p{N}'-]/gu, '');
+    }
     e.preventDefault();
     setError(undefined);
     setLoading(true);
@@ -40,6 +48,8 @@ export default function ContactForm() {
       if (!res.ok || !json.ok) throw new Error(json.error || "Failed");
       setSent(true);
       form.reset();
+  const fname = firstName(payload.name as string | undefined) || 'there';
+  router.push(`/contact/thank-you?name=${encodeURIComponent(fname)}`);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Error");
     } finally {
@@ -47,11 +57,7 @@ export default function ContactForm() {
     }
   }
   if (sent)
-    return (
-      <div className="panel p-6 rounded-md text-sm text-cyan-300" role="status">
-        Message transmitted. We&apos;ll respond shortly.
-      </div>
-    );
+  return null; // momentary during redirect
   return (
     <form
       className="space-y-6"
