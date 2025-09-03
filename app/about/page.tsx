@@ -213,8 +213,8 @@ export default function AboutPage() {
             className="relative aspect-[4/3] rounded-md panel overflow-hidden"
             aria-label="Photo of Void the cat">
             <Image
-              src="/Cats/Void.webp"
-              alt="Void Laying in front of a keyboard"
+              src="/Cats/void.webp"
+              alt="The Void Laying in front of a keyboard"
               fill
               className="object-cover"
               priority={false}
@@ -226,7 +226,7 @@ export default function AboutPage() {
             />
           </div>
             <div className="space-y-2">
-              <h3 className="font-display tracking-wide text-lg text-cyan-300">Void</h3>
+              <h3 className="font-display tracking-wide text-lg text-cyan-300">The Void</h3>
               <p className="text-sm text-slate-300 leading-relaxed">The Void will regularly take advantage of her fur coloring to blend in with the shadows. She is, without a doubt, the loudest and most vocal cat I&apos;ve ever had the pleasure of knowing. She&apos;s incredibly soft and has a knack for finding the coziest spots in the house.</p>
               <a
                 href="https://donate.stripe.com/3cI4gB8cR3Z6f6J3bI87K01"
