@@ -69,6 +69,12 @@ export const projects: Project[] = [
         description:
           "Allowing for population of dynamic data and custom fields",
       },
+      {
+        name: "Kinsta",
+        url: "https://kinsta.com",
+        description:
+          "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
+      },
     ],
   },
   {
@@ -111,6 +117,12 @@ export const projects: Project[] = [
         description:
           "Allowing for population of dynamic data and custom fields",
       },
+      {
+        name: "Kinsta",
+        url: "https://kinsta.com",
+        description:
+          "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
+      },
     ],
   },
   {
@@ -152,6 +164,12 @@ export const projects: Project[] = [
         url: "https://www.advancedcustomfields.com/pro/",
         description:
           "Allowing for population of dynamic data and custom fields",
+      },
+      {
+        name: "Kinsta",
+        url: "https://kinsta.com",
+        description:
+          "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
     ],
   },

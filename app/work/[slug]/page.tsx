@@ -35,7 +35,7 @@ export default async function ProjectPage({ params }: Props) {
       u.searchParams.set("utm_medium", "referral");
       u.searchParams.set("utm_campaign", project.slug);
       outboundHref = u.toString();
-    } catch (e) {
+  } catch {
       outboundHref = project.siteUrl;
     }
   }
@@ -92,7 +92,7 @@ export default async function ProjectPage({ params }: Props) {
             rel="noopener"
             referrerPolicy="strict-origin-when-cross-origin"
             className="btn text-sm">
-            Visit Their Website ↗
+            Visit Client Website ↗
           </a>
         </div>
       )}
