@@ -77,7 +77,7 @@ export const projects: Project[] = [
       },
       {
         name: "Kinsta",
-        url: "https://kinsta.com",
+        url: "https://kinsta.com/?kaid=EJDUYZSHLKOS",
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
@@ -131,7 +131,7 @@ export const projects: Project[] = [
       },
       {
         name: "Kinsta",
-        url: "https://kinsta.com",
+        url: "https://kinsta.com/?kaid=EJDUYZSHLKOS",
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
@@ -185,7 +185,7 @@ export const projects: Project[] = [
       },
       {
         name: "Kinsta",
-        url: "https://kinsta.com",
+        url: "https://kinsta.com/?kaid=EJDUYZSHLKOS",
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },

@@ -173,7 +173,7 @@ export default function AboutPage() {
       {/* Cats Section */}
       <section className="space-y-8 pt-4">
         <h2 className="text-cyan-300 font-display text-sm tracking-widest">CATS: RIPLEY & VOID</h2>
-        <p className="text-slate-400 text-sm max-w-prose">Mission support felines. I’ll add fuller bios shortly— for now you can still bribe morale.</p>
+        <p className="text-slate-400 text-sm max-w-prose">Mission support felines. God&apos;s perfect creation.</p>
         <div className="grid md:grid-cols-2 gap-8">
           {/* Ripley */}
           <div className="panel rounded-md p-5 space-y-4 brackets">
