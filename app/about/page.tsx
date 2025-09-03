@@ -184,7 +184,7 @@ export default function AboutPage() {
               <h3 className="font-display tracking-wide text-lg text-cyan-300">Ripley</h3>
               <p className="text-sm text-slate-300 leading-relaxed">Ripley description goes here. Add personality notes, quirks, operational specialties (e.g. keyboard supervision, late‑night code review assistance).</p>
               <a
-                href={process.env.NEXT_PUBLIC_STRIPE_RIPLEY_TREAT_URL || '#'}
+                href="https://donate.stripe.com/3cI4gB8cR3Z6f6J3bI87K01"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn text-xs"
@@ -203,7 +203,7 @@ export default function AboutPage() {
               <h3 className="font-display tracking-wide text-lg text-cyan-300">Void</h3>
               <p className="text-sm text-slate-300 leading-relaxed">Void description goes here. Add stealth attributes, preferred ambient lighting conditions, and any treat biases.</p>
               <a
-                href={process.env.NEXT_PUBLIC_STRIPE_VOID_TREAT_URL || '#'}
+                href="https://donate.stripe.com/3cI4gB8cR3Z6f6J3bI87K01"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="btn text-xs"

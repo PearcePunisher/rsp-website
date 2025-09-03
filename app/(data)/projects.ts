@@ -64,6 +64,12 @@ export const projects: Project[] = [
         description: "Incredibly robust form builder",
       },
       {
+        name: "Gravity Wiz",
+        url: "https://gravitywiz.com",
+        description:
+          "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
+      },
+      {
         name: "Advanced Custom Fields Pro",
         url: "https://www.advancedcustomfields.com/pro/",
         description:
@@ -112,6 +118,12 @@ export const projects: Project[] = [
         description: "Incredibly robust form builder",
       },
       {
+        name: "Gravity Wiz",
+        url: "https://gravitywiz.com",
+        description:
+          "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
+      },
+      {
         name: "Advanced Custom Fields Pro",
         url: "https://www.advancedcustomfields.com/pro/",
         description:
@@ -158,6 +170,12 @@ export const projects: Project[] = [
         name: "Gravity Forms",
         url: "https://gravityforms.com",
         description: "Incredibly robust form builder",
+      },
+      {
+        name: "Gravity Wiz",
+        url: "https://gravitywiz.com",
+        description:
+          "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
       },
       {
         name: "Advanced Custom Fields Pro",
