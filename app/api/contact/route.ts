@@ -5,7 +5,7 @@ import { sendOwnerNotification, sendCustomerReceipt } from '@/lib/email';
 export async function POST(req: NextRequest) {
   try {
   const body = await req.json();
-    const { name, email, company, budget, message } = body || {};
+  const { name, email, company, budget, message, phone } = body || {};
     if(!name || !email || !message) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
@@ -21,6 +21,7 @@ export async function POST(req: NextRequest) {
       email: String(email).toLowerCase().slice(0,320),
       company: company ? String(company).slice(0,200) : undefined,
       budget: budget ? String(budget).slice(0,50) : undefined,
+      phone: phone ? String(phone).slice(0,50) : undefined,
       message: String(message).slice(0,4000),
       userAgent: req.headers.get('user-agent') || undefined,
       ip: ip || undefined,
@@ -31,7 +32,7 @@ export async function POST(req: NextRequest) {
       landing_path: url.pathname.slice(0,500),
       raw_query: url.search.slice(0,1000) || undefined,
     };
-    await insertLead(lead);
+  await insertLead(lead);
     let ownerOk = false; let customerOk = false;
     try {
       const ownerPayload = {
@@ -39,6 +40,7 @@ export async function POST(req: NextRequest) {
         email: lead.email,
         company: lead.company,
         budget: lead.budget,
+        phone: lead.phone,
         message: lead.message,
       };
       await sendOwnerNotification(ownerPayload);
@@ -52,6 +54,7 @@ export async function POST(req: NextRequest) {
         email: lead.email,
         company: lead.company,
         budget: lead.budget,
+        phone: lead.phone,
         message: lead.message,
       };
       await sendCustomerReceipt(customerPayload);

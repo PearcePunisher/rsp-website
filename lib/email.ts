@@ -24,6 +24,7 @@ interface LeadData {
   email: string;
   company?: string;
   budget?: string;
+  phone?: string;
   message: string;
 }
 
@@ -56,8 +57,9 @@ export async function sendOwnerNotification(data: LeadData) {
     <table role="presentation" style="width:100%;font-size:14px;margin-top:16px;border-collapse:collapse;">
       <tr><td style="padding:4px 0;width:90px;color:${DIM};">Name</td><td>${escapeHtml(data.name)}</td></tr>
       <tr><td style="padding:4px 0;color:${DIM};">Email</td><td><a href="mailto:${escapeHtml(data.email)}" style="color:${BRAND_CYAN};text-decoration:none;">${escapeHtml(data.email)}</a></td></tr>
-      ${data.company ? `<tr><td style='padding:4px 0;color:${DIM};'>Company</td><td>${escapeHtml(data.company)}</td></tr>` : ''}
-      ${data.budget ? `<tr><td style='padding:4px 0;color:${DIM};'>Budget</td><td>${escapeHtml(data.budget)}</td></tr>` : ''}
+  ${data.company ? `<tr><td style='padding:4px 0;color:${DIM};'>Company</td><td>${escapeHtml(data.company)}</td></tr>` : ''}
+  ${data.phone ? `<tr><td style='padding:4px 0;color:${DIM};'>Phone</td><td>${escapeHtml(data.phone)}</td></tr>` : ''}
+  ${data.budget ? `<tr><td style='padding:4px 0;color:${DIM};'>Budget</td><td>${escapeHtml(data.budget)}</td></tr>` : ''}
       <tr><td style="padding:4px 0;color:${DIM};vertical-align:top;">Message</td><td style="white-space:pre-line;">${escapeHtml(data.message)}</td></tr>
     </table>
   `, 'New Lead');
