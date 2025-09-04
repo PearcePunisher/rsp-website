@@ -65,7 +65,7 @@ export const projects: Project[] = [
       },
       {
         name: "Gravity Wiz",
-        url: "https://gravitywiz.com",
+        url: "https://gravitywiz.com/?ref=508",
         description:
           "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
       },
@@ -119,7 +119,7 @@ export const projects: Project[] = [
       },
       {
         name: "Gravity Wiz",
-        url: "https://gravitywiz.com",
+        url: "https://gravitywiz.com/?ref=508",
         description:
           "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
       },
@@ -173,7 +173,7 @@ export const projects: Project[] = [
       },
       {
         name: "Gravity Wiz",
-        url: "https://gravitywiz.com",
+        url: "https://gravitywiz.com/?ref=508",
         description:
           "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
       },
