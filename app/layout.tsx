@@ -4,8 +4,8 @@ import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/next";
-import { GoogleAnalytics } from "@next/third-parties/google";
-import { SpeedInsights } from "@vercel/speed-insights/next"
+import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 const orbitron = Orbitron({
   variable: "--font-display",
@@ -71,6 +71,7 @@ export default function RootLayout({
         <Analytics />
         <SpeedInsights />
       </body>
+      <GoogleTagManager gtmId="GTM-MVPPRQ7M" />
     </html>
   );
 }
