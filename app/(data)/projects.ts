@@ -19,6 +19,11 @@ export type Project = {
     url: string; // Full (affiliate) URL
     description?: string; // Optional note
   }[];
+  credits?: {
+    name: string;
+    url?: string; // Optional personal/portfolio link
+    role: string; // Their role on the project
+  }[];
 };
 
 export const projects: Project[] = [
@@ -52,7 +57,7 @@ export const projects: Project[] = [
 - Empowered content editors with a simplified Oxygen workflow, shortening the time to publish new developments.
 - Better user experience supporting higher engagement and stronger lead capture.`,
     },
-    plugins: [
+  plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -81,7 +86,8 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-    ],
+  ],
+  credits: [{ name: 'Stephen Davis', url: 'https://stephendavis.ink', role: 'Designer' }, { name: 'Cody Martin', url: 'https://www.linkedin.com/in/cody-martin/', role: 'Account Executive/Copywriter'}],
   },
   {
     slug: "promeniq",
@@ -106,7 +112,7 @@ export const projects: Project[] = [
 - A modular template system that allowed for quick scaling and customization as new affiliate practices joined.
 - Improved SEO performance, increasing organic visibility and attracting more qualified leads.`,
     },
-    plugins: [
+  plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -135,7 +141,8 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-    ],
+  ],
+  credits: [],
   },
   {
     slug: "fyxon",
@@ -160,7 +167,7 @@ export const projects: Project[] = [
 - A modular template system that allowed for quick scaling and customization as new services were added.
 - Improved SEO performance, increasing organic visibility.`,
     },
-    plugins: [
+  plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -189,6 +196,7 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-    ],
+  ],
+  credits: [],
   },
 ];

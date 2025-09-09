@@ -136,6 +136,37 @@ export default async function ProjectPage({ params }: Props) {
           </p>
         </section>
       )}
+      {project.credits && project.credits.length > 0 && (
+        <section className="mt-12">
+          <h2 className="text-xl font-display tracking-wide mb-4">Credits</h2>
+          <ul className="space-y-1 text-sm text-slate-300">
+            {project.credits.map((c) => (
+              <li key={c.name} className="flex items-center gap-2">
+                <span className="text-cyan-300">{c.role}:</span>
+                {c.url ? (
+                  (() => {
+                    let creditHref = c.url as string;
+                    try {
+                      const u = new URL(c.url as string);
+                      u.searchParams.set("utm_source", "roguesalad.co");
+                      u.searchParams.set("utm_medium", "referral");
+                      u.searchParams.set("utm_campaign", project.slug);
+                      u.searchParams.set("utm_content", "credit");
+                      u.searchParams.set("utm_term", c.role);
+                      creditHref = u.toString();
+                    } catch {}
+                    return (
+                      <a href={creditHref} target="_blank" rel="noopener" className="underline hover:text-cyan-100">{c.name} ↗</a>
+                    );
+                  })()
+                ) : (
+                  <span>{c.name}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
         <Link href="/work" className="text-cyan-300">
           ← All Work
