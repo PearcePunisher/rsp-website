@@ -27,6 +27,9 @@ export type Project = {
 };
 
 export const projects: Project[] = [
+  // ************
+  // Vantage Homes Colorado Website
+  // ************
   {
     slug: "vantage-homes",
     title: "Vantage Homes Colorado Website",
@@ -57,7 +60,7 @@ export const projects: Project[] = [
 - Empowered content editors with a simplified Oxygen workflow, shortening the time to publish new developments.
 - Better user experience supporting higher engagement and stronger lead capture.`,
     },
-  plugins: [
+    plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -86,9 +89,23 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-  ],
-  credits: [{ name: 'Stephen Davis', url: 'https://stephendavis.ink', role: 'Designer' }, { name: 'Cody Martin', url: 'https://www.linkedin.com/in/cody-martin/', role: 'Account Executive/Copywriter'}],
+    ],
+    credits: [
+      {
+        name: "Stephen Davis",
+        url: "https://stephendavis.ink",
+        role: "Designer",
+      },
+      {
+        name: "Cody Martin",
+        url: "https://www.linkedin.com/in/cody-martin/",
+        role: "Account Executive/Copywriter",
+      },
+    ],
   },
+  // ************
+  // Promeniq Men's Health Website
+  // ************
   {
     slug: "promeniq",
     title: "Promeniq Men's Health Website",
@@ -112,7 +129,7 @@ export const projects: Project[] = [
 - A modular template system that allowed for quick scaling and customization as new affiliate practices joined.
 - Improved SEO performance, increasing organic visibility and attracting more qualified leads.`,
     },
-  plugins: [
+    plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -141,9 +158,23 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-  ],
-  credits: [],
+    ],
+    credits: [
+      {
+        name: "Noah Beatty",
+        url: "https://www.linkedin.com/in/noa-beatty-622796278/",
+        role: "Designer",
+      },
+      {
+        name: "Mike Shugart",
+        url: "https://www.linkedin.com/in/mike-shugart-42b654129/",
+        role: "Account Executive/Copywriter",
+      },
+    ],
   },
+  // ************
+  // Fyxon Construction and Restoration Website
+  // ************
   {
     slug: "fyxon",
     title: "Fyxon Construction and Restoration Website",
@@ -167,7 +198,7 @@ export const projects: Project[] = [
 - A modular template system that allowed for quick scaling and customization as new services were added.
 - Improved SEO performance, increasing organic visibility.`,
     },
-  plugins: [
+    plugins: [
       {
         name: "Oxygen Builder",
         url: "https://oxygenbuilder.com",
@@ -196,7 +227,94 @@ export const projects: Project[] = [
         description:
           "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
       },
-  ],
-  credits: [],
+    ],
+    credits: [
+      {
+        name: "Stephen Davis",
+        url: "https://stephendavis.ink",
+        role: "Designer",
+      },
+      {
+        name: "Mike Shugart",
+        url: "https://www.linkedin.com/in/mike-shugart-42b654129/",
+        role: "Account Executive/Copywriter",
+      },
+    ],
+  },
+  // ************
+  // Pikes Peak YMCA Website
+  // ************
+  {
+    slug: "ppymca",
+    title: "Pikes Peak YMCA Website",
+    siteUrl: "https://www.ppymca.org",
+    role: ["Development", "Design"],
+    year: 2024,
+    category: "Web Development",
+    tags: ["WordPress", "Oxygen Builder", "Advanced Custom Fields"],
+    summary:
+      "Develop a responsive and performant website for the Pikes Peak YMCA, a local branch of the national YMCA organization.",
+    coverImage: "/ppymca/ppymca.webp",
+    images: [
+      "/placeholders/ghost-signal-1.jpg",
+      "/placeholders/ghost-signal-2.jpg",
+    ],
+    caseStudy: {
+      problem: `The PPYMCA needed a website that could effectively serve its local community while aligning with the broader YMCA brand. The existing site was outdated, difficult to navigate, and not optimized for mobile devices. The organization required a modern, user-friendly platform that would facilitate easy access to information about programs, memberships, and events, as well as streamline the process for online registrations and donations.`,
+      approach: `To address these needs, I implemented a comprehensive redesign and rebuild of the website using WordPress and the Oxygen Builder. Key steps included: Configuring a new WordPress installation with a custom Oxygen theme to ensure a fast, maintainable foundation. Developing custom templates in Oxygen with componentized, accessible markup and mobile-first styling to enhance user experience. Implementing a clear navigation structure and prominent calls-to-action to guide users to key information and resources.`,
+      outcome: `The final website delivered a modern, responsive design that effectively communicated the PPYMCA's brand values and services. Key outcomes included: A user-friendly interface that simplified navigation and removed friction from the contact process. A modular template system that allowed for quick scaling and customization as new services were added. Improved SEO performance, increasing organic visibility.`,
+    },
+    plugins: [
+      {
+        name: "Oxygen Builder",
+        url: "https://oxygenbuilder.com",
+        description: "The most dev-friendly visual website builder",
+      },
+      {
+        name: "Gravity Forms",
+        url: "https://gravityforms.com",
+        description: "Incredibly robust form builder",
+      },
+      {
+        name: "Gravity Wiz",
+        url: "https://gravitywiz.com/?ref=508",
+        description:
+          "The ultimate enhancement toolkit for Gravity Forms. Bar none.",
+      },
+      {
+        name: "Advanced Custom Fields Pro",
+        url: "https://www.advancedcustomfields.com/pro/",
+        description:
+          "Allowing for population of dynamic data and custom fields",
+      },
+      {
+        name: "Kinsta",
+        url: "https://kinsta.com/?kaid=EJDUYZSHLKOS",
+        description:
+          "Premium managed WordPress hosting with a focus on performance and my only choice for hosting.",
+      },
+    ],
+    credits: [
+      {
+        name: "Stephen Davis",
+        url: "https://stephendavis.ink",
+        role: "Designer",
+      },
+      {
+        name: "Cody Martin",
+        url: "https://www.linkedin.com/in/cody-martin/",
+        role: "Account Executive/Copywriter",
+      },
+      {
+        name: "Hayden Vick",
+        url: "https://www.linkedin.com/in/haydenvick/",
+        role: "Junior Developer"
+      },
+      {
+        name: "Alexander Bisant",
+        url: "https://www.linkedin.com/in/alexander-bisant-3a39b9141/",
+        role: "Senior Back-End Developer"
+      }
+    ],
   },
 ];
