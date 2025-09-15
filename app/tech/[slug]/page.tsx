@@ -1,87 +1,115 @@
-import { projects } from "../../(data)/projects";
+import { client } from "@/src/sanity/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-interface Props {
-  params: Promise<{ slug: string }>;
-}
+const POST_QUERY = `*[_type == "work" && slug.current == $slug][0]{
+  title,
+  "slug": slug.current,
+  summary,
+  siteUrl,
+  "coverUrl": coverImage.asset->url,
+  tags,
+  caseStudy,
+  problemTest,
+  plugins[]{ name, url, description },
+  credits[]{ name, url, role }
+}`;
 
-export async function generateStaticParams() {
-  return projects.map((p) => ({ slug: p.slug }));
-}
+const options = { next: { revalidate: 30 } };
 
-export async function generateMetadata({
+type WorkDoc = {
+  title: string;
+  slug: string;
+  summary?: string;
+  siteUrl?: string;
+  coverUrl?: string;
+  tags?: string[];
+  caseStudy?: { problem?: string; approach?: string; outcome?: string };
+  plugins?: { name: string; url: string; description?: string }[];
+  credits?: { name: string; url?: string; role: string }[];
+};
+
+export default async function PostPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
-  if (!project) return { title: "Project" };
-  return { title: project.title, description: project.summary };
-}
-
-export default async function ProjectPage({ params }: Props) {
-  const { slug } = await params;
-  const project = projects.find((p) => p.slug === slug);
+  const project = await client.fetch<WorkDoc>(POST_QUERY, await params, options);
   if (!project) notFound();
-  let outboundHref: string | undefined = undefined;
+
+  let outboundHref: string | undefined;
   if (project.siteUrl) {
     try {
       const u = new URL(project.siteUrl);
-      // UTM parameters: update source/medium/campaign as desired
       u.searchParams.set("utm_source", "roguesalad.co");
       u.searchParams.set("utm_medium", "referral");
       u.searchParams.set("utm_campaign", project.slug);
       outboundHref = u.toString();
-  } catch {
+    } catch {
       outboundHref = project.siteUrl;
     }
   }
+
   return (
     <article className="container-max py-16 space-y-10">
       <header>
         <h1 className="font-display tracking-wide mb-2">{project.title}</h1>
-        <p className="text-slate-400 text-sm max-w-prose">{project.summary}</p>
-        <ul className="flex flex-wrap gap-2 mt-4 text-[11px] tracking-wider text-cyan-300/80">
-          {project.tags.map((tag) => (
-            <li key={tag} className="px-2.5 py-1 rounded-full border border-cyan-400/40 bg-[#0b1419]/70">{tag}</li>
-          ))}
-        </ul>
+        {project.summary && (
+          <p className="text-slate-400 text-sm max-w-prose">{project.summary}</p>
+        )}
+        {project.tags && project.tags.length > 0 && (
+          <ul className="flex flex-wrap gap-2 mt-4 text-[11px] tracking-wider text-cyan-300/80">
+            {project.tags.map((tag) => (
+              <li
+                key={tag}
+                className="px-2.5 py-1 rounded-full border border-cyan-400/40 bg-[#0b1419]/70">
+                {tag}
+              </li>
+            ))}
+          </ul>
+        )}
       </header>
-      <div
-        className="relative aspect-video w-full panel rounded-md overflow-hidden"
-        aria-label="Project cover image">
-        <Image
-          src={project.coverImage}
-          alt={project.title}
-          fill
-          className="object-cover"
-          priority={false}
-          sizes="(max-width: 768px) 100vw, 80vw"
-        />
-      </div>
+      {project.coverUrl && (
+        <div
+          className="relative aspect-video w-full panel rounded-md overflow-hidden"
+          aria-label="Project cover image">
+          <Image
+            src={project.coverUrl}
+            alt={project.title}
+            fill
+            className="object-cover"
+            priority={false}
+            sizes="(max-width: 768px) 100vw, 80vw"
+          />
+        </div>
+      )}
       {project.caseStudy && (
         <div className="grid md:grid-cols-3 gap-8 text-sm text-slate-300">
-          <div>
-            <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
-              PROBLEM
-            </h2>
-            <p>{project.caseStudy.problem}</p>
-          </div>
-          <div>
-            <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
-              APPROACH
-            </h2>
-            <p>{project.caseStudy.approach}</p>
-          </div>
-          <div>
-            <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
-              OUTCOME
-            </h2>
-            <p>{project.caseStudy.outcome}</p>
-          </div>
+          {project.caseStudy.problem && (
+            <div>
+              <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
+                PROBLEM
+              </h2>
+              <p>{project.caseStudy.problem}</p>
+            </div>
+          )}
+          {project.caseStudy.approach && (
+            <div>
+              <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
+                APPROACH
+              </h2>
+              <p>{project.caseStudy.approach}</p>
+            </div>
+          )}
+          {project.caseStudy.outcome && (
+            <div>
+              <h2 className="text-cyan-300 font-display text-sm tracking-widest mb-2">
+                OUTCOME
+              </h2>
+              <p>{project.caseStudy.outcome}</p>
+            </div>
+          )}
         </div>
       )}
       {outboundHref && (
@@ -167,8 +195,14 @@ export default async function ProjectPage({ params }: Props) {
           </ul>
         </section>
       )}
+      <section className="panel rounded-md p-8 text-center space-y-3 mt-12">
+        <h2 className="font-display tracking-wide text-lg">Want a website like this one?</h2>
+        <Link href="/contact" className="btn" aria-label="Contact — Start a project">
+          Let&apos;s chat
+        </Link>
+      </section>
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
-        <Link href="/work" className="text-cyan-300">
+        <Link href="/tech" className="text-cyan-300">
           ← All Work
         </Link>
       </nav>
