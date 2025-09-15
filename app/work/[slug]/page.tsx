@@ -202,7 +202,7 @@ export default async function PostPage({
         </Link>
       </section>
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
-        <Link href="/tech" className="text-cyan-300">
+        <Link href="/work" className="text-cyan-300">
           ← All Work
         </Link>
       </nav>
