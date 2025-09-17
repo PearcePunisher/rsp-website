@@ -2,20 +2,26 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { client } from '@/src/sanity/client';
 
-const QUERY = `*[_type == "post" && defined(slug.current)]|order(publishedAt desc)[0...12]{
-  title,
-  "slug": slug.current,
-  publishedAt,
-  "imageUrl": mainImage.asset->url,
-  "excerpt": pt::text(body)[0...200]
-}`;
+// Supports both legacy `post` documents with `mainImage` and new `page` documents with `heroImage`
+// Pages-only listing (blog now powered solely by `page` documents)
+const QUERY = `*[_type == "page" && defined(slug.current)]
+  | order(_createdAt desc)[0...12]{
+    _type,
+    title,
+    "slug": slug.current,
+    _createdAt,
+    // Flatten hero image
+    "imageUrl": heroImage.asset->url,
+    // Derive excerpt from first blockSection's portable text; use substring syntax [0...200]
+    "excerpt": pt::text(sections[_type == 'blockSection'][0].content)[0...200]
+  }`;
 
 const options = { next: { revalidate: 60 } };
 
-type Post = { slug: string; title: string; publishedAt: string; imageUrl?: string; excerpt?: string };
+type ListItem = { slug: string; title: string; imageUrl?: string; excerpt?: string; _createdAt?: string; _type: string };
 
 export default async function BlogIndex() {
-  const posts = await client.fetch<Post[]>(QUERY, {}, options);
+  const posts = await client.fetch<ListItem[]>(QUERY, {}, options);
 
   return (
     <div className="container-max py-16 space-y-12">
@@ -24,7 +30,9 @@ export default async function BlogIndex() {
         <p className="text-slate-400 max-w-prose text-sm">Recent posts and essays.</p>
       </header>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
-        {posts.map((p) => (
+        {posts.map((p) => {
+          const date = p._createdAt;
+          return (
           <Link key={p.slug} href={`/blog/${p.slug}`} className="panel brackets rounded-md p-4 group">
             <div className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden" aria-hidden>
               {p.imageUrl && (
@@ -33,9 +41,9 @@ export default async function BlogIndex() {
             </div>
             <h2 className="text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors">{p.title}</h2>
             <p className="text-xs text-slate-400 mt-1 line-clamp-3">{p.excerpt}</p>
-            <span className="mt-3 inline-block text-[10px] text-cyan-300/70 tracking-widest">{new Date(p.publishedAt).toLocaleDateString()}</span>
+            {date && <span className="mt-3 inline-block text-[10px] text-cyan-300/70 tracking-widest">{new Date(date).toLocaleDateString()}</span>}
           </Link>
-        ))}
+        )})}
       </div>
     </div>
   );

@@ -64,3 +64,9 @@ a:hover { text-decoration:underline; }
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
 }
+
+/* Blog content rhythm */
+article .prose p { margin-bottom:15px; }
+article .prose h4 { margin-bottom:15px; }
+article .prose ul { list-style:circle; margin-left:2rem; margin-bottom:15px; }
+article .prose ul ul { margin-bottom:0; }
