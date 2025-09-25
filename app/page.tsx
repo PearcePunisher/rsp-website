@@ -1,4 +1,4 @@
-import { projects } from "./(data)/projects";
+import { client } from "@/src/sanity/client";
 import SectionHeader from "./components/SectionHeader";
 import Link from "next/link";
 import Image from "next/image";
@@ -23,8 +23,25 @@ const ldJson = {
   logo: "/rsp-logo.png",
 };
 
-export default function Home() {
-  const featured = projects.slice(0, 6);
+const FEATURED_WORK_QUERY = `*[_type == "work" && defined(slug.current)]
+  | order(publishedAt desc)[0...6]{
+    title,
+    "slug": slug.current,
+    "coverUrl": coverImage.asset->url,
+    summary,
+    tags
+  }`;
+
+type Featured = {
+  slug: string;
+  title: string;
+  coverUrl?: string;
+  summary?: string;
+  tags?: string[];
+};
+
+export default async function Home() {
+  const featured = await client.fetch<Featured[]>(FEATURED_WORK_QUERY);
   return (
     <div className="space-y-28 pb-32">
       <script
@@ -83,7 +100,7 @@ export default function Home() {
                 className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"
                 aria-hidden>
                 <Image
-                  src={p.coverImage}
+                  src={p.coverUrl || "/next.svg"}
                   alt={`${p.title} — screenshot of responsive homepage`}
                   fill
                   className="object-cover"
@@ -98,7 +115,7 @@ export default function Home() {
                 {p.summary}
               </p>
               <ul className="flex flex-wrap gap-2 mt-3 text-[10px] tracking-wide text-cyan-300/80">
-                {p.tags.slice(0, 3).map((t) => (
+                {(p.tags || []).slice(0, 3).map((t) => (
                   <li key={t}>{t}</li>
                 ))}
               </ul>
