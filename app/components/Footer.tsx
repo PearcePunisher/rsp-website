@@ -16,6 +16,7 @@ export default function Footer(){
           {/* <Link href="https://instagram.com" className="hover:text-cyan-300">Instagram</Link> */}
           <Link href="/privacy" className="hover:text-cyan-300">Privacy</Link>
           <Link href="https://billing.stripe.com/p/login/4gMaEZdxb67egaN13A87K00" target="_blank" className="hover:text-cyan-300">Billing</Link>
+          <Link href="/qr" className="hover:text-cyan-300">Free QR Code Generator</Link>
         </div>
         <p className="md:text-right">© {new Date().getFullYear()} Rogue Salad Productions - Kept you waiting, huh?</p>
       </div>
