@@ -6,6 +6,7 @@ import Footer from "./components/Footer";
 import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import Script from "next/script";
 
 const orbitron = Orbitron({
   variable: "--font-display",
@@ -64,6 +65,11 @@ export default function RootLayout({
     <html lang="en" className="bg-black text-white">
       <body
         className={`${orbitron.variable} ${inter.variable} font-sans antialiased min-h-screen flex flex-col`}>
+        <Script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="bb917952-d701-41dc-85cf-6fafd3067193"
+        />
         <GoogleAnalytics gaId="G-R6S3LW3CJB" />
         <NavBar />
         <main className="flex-1">{children}</main>
