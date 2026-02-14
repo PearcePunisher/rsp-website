@@ -18,6 +18,7 @@
   --scanline-opacity: 0.07;
 }
 
+/* Base styles */
 body {
   background: radial-gradient(circle at 50% 0%, #0e1419 0%, #05080a 70%) fixed;
   color: var(--color-text);
