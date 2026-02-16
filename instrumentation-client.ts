@@ -1,4 +1,4 @@
-import { initBotId } from "botid/client";
+import { initBotId } from "botid/client/core";
 
 initBotId({
   protect: [
