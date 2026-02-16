@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { insertLead } from '@/lib/db';
 import { sendOwnerNotification, sendCustomerReceipt } from '@/lib/email';
+import { checkBotId } from 'botid/server';
 
 const RATE_LIMIT_MAX = 5;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
@@ -80,6 +81,11 @@ export async function POST(req: NextRequest) {
     const ip = getClientIp(req);
     if (isRateLimited(ip)) {
       return NextResponse.json({ error: 'Too many requests' }, { status: 429 });
+    }
+
+    const verification = await checkBotId();
+    if (verification.isBot) {
+      return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
     if(!name || !email || !message) {
