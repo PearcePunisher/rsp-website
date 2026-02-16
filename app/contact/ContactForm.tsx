@@ -6,12 +6,14 @@ export default function ContactForm() {
   const [sent, setSent] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
+  const [formStartedAt, setFormStartedAt] = useState<number>(Date.now());
   const router = useRouter();
   const [attribution, setAttribution] = useState<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_path?: string; raw_query?: string }>({});
   const captured = useRef(false);
   useEffect(() => {
     if (captured.current) return; // only run once on mount
     captured.current = true;
+    setFormStartedAt(Date.now());
     try {
       const url = new URL(window.location.href);
       const params = url.searchParams;
@@ -151,6 +153,11 @@ export default function ContactForm() {
           rows={6}
           className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
         />
+      </div>
+      <input type="hidden" name="form_started_at" value={String(formStartedAt)} />
+      <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">Leave this field empty</label>
+        <input id="website" name="website" tabIndex={-1} autoComplete="off" />
       </div>
       {error && (
         <p className="text-red-400 text-sm" role="alert">
