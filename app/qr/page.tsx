@@ -1,7 +1,10 @@
 'use client';
 
-import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { QrCode, Link, MessageSquare, User, Download, Copy, Check, Terminal } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { QrCode, Link, MessageSquare, User, Download, Copy, Check, Terminal, Palette, RotateCcw } from 'lucide-react';
+import type QRCodeStyling from 'qr-code-styling';
+import type { FileExtension, Options } from 'qr-code-styling';
+import qrcode from 'qrcode-generator';
 
 const TRANSLATIONS = {
   "en-US": {
@@ -39,7 +42,14 @@ const TRANSLATIONS = {
     "copied": "Copied!",
     "qrCodeData": "QR Code Data:",
     "footerText": "Generate QR codes instantly • No data stored • Free to use",
-    "qrCodeAlt": "Generated QR Code"
+    "qrCodeAlt": "Generated QR Code",
+    "customizeColors": "Customize Colors",
+    "codeColor": "Code",
+    "backgroundColor": "Background",
+    "cornerColor": "Corner Squares",
+    "resetColors": "Reset colors",
+    "exportFormat": "Format",
+    "transparentBackground": "Transparent background"
   },
   "es-ES": {
     "appTitle": "Generador de Códigos QR",
@@ -76,7 +86,14 @@ const TRANSLATIONS = {
     "copied": "¡Copiado!",
     "qrCodeData": "Datos del Código QR:",
     "footerText": "Genera códigos QR al instante • No se almacenan datos • Gratis",
-    "qrCodeAlt": "Código QR Generado"
+    "qrCodeAlt": "Código QR Generado",
+    "customizeColors": "Personalizar Colores",
+    "codeColor": "Código",
+    "backgroundColor": "Fondo",
+    "cornerColor": "Esquinas",
+    "resetColors": "Restablecer colores",
+    "exportFormat": "Formato",
+    "transparentBackground": "Fondo transparente"
   }
 } as const;
 
@@ -114,27 +131,34 @@ interface ContactInfo {
   url: string;
 }
 
-interface QRiousOptions {
-  element: HTMLCanvasElement;
-  value: string;
-  size: number;
-  background: string;
-  foreground: string;
-  level: string;
-}
+const DEFAULT_COLORS = {
+  dots: '#000000',
+  background: '#ffffff',
+  corners: '#000000',
+} as const;
 
-declare global {
-  interface Window {
-    QRious: new (options: QRiousOptions) => unknown;
-  }
-}
+const EXPORT_FORMATS: { value: FileExtension; label: string }[] = [
+  { value: 'png', label: 'PNG' },
+  { value: 'jpeg', label: 'JPG' },
+  { value: 'svg', label: 'SVG' },
+];
 
 const QRCodeGenerator = () => {
   const [activeTab, setActiveTab] = useState('url');
   const [qrData, setQrData] = useState('');
   const [copied, setCopied] = useState(false);
   const qrContainerRef = useRef<HTMLDivElement>(null);
-  
+  const qrInstanceRef = useRef<QRCodeStyling | null>(null);
+
+  // Color customization
+  const [dotsColor, setDotsColor] = useState<string>(DEFAULT_COLORS.dots);
+  const [backgroundColor, setBackgroundColor] = useState<string>(DEFAULT_COLORS.background);
+  const [cornersColor, setCornersColor] = useState<string>(DEFAULT_COLORS.corners);
+  const [transparentBg, setTransparentBg] = useState(false);
+
+  // Export format
+  const [exportFormat, setExportFormat] = useState<FileExtension>('png');
+
   // Form states for different types
   const [urlInput, setUrlInput] = useState('');
   const [textInput, setTextInput] = useState('');
@@ -147,91 +171,67 @@ const QRCodeGenerator = () => {
     url: ''
   });
 
-  const generateFallbackQR = useCallback((text: string) => {
-    if (!qrContainerRef.current) return;
-    
-    // Clear previous content
-    qrContainerRef.current.innerHTML = '';
-    
-    // Create img element for fallback
-    const img = document.createElement('img');
-    const encodedData = encodeURIComponent(text);
-    img.src = `https://chart.googleapis.com/chart?chs=300x300&cht=qr&chl=${encodedData}&choe=UTF-8`;
-    img.alt = t('qrCodeAlt');
-    img.className = 'w-full h-auto';
-    img.style.maxWidth = '300px';
-    img.style.height = 'auto';
-    // img.style.filter = 'invert(1) hue-rotate(160deg) saturate(3)';
-    
-    // Add error handling for the fallback image
-    img.onerror = () => {
-      // If Google Charts also fails, try QR Server API
-      img.src = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodedData}&format=png&margin=10`;
-    };
-    
-    qrContainerRef.current.appendChild(img);
-  }, []);
+  // Transparent background can't be expressed by a color input, so it's a
+  // separate flag. rgba(0,0,0,0) gives a real transparent fill for the
+  // preview and PNG export.
+  const effectiveBackground = transparentBg ? 'rgba(0,0,0,0)' : backgroundColor;
 
-  const createQR = useCallback((text: string) => {
-    if (!qrContainerRef.current) return;
-    
-    try {
-      // Clear previous QR code
-      qrContainerRef.current.innerHTML = '';
-      
-      // Create canvas element
-      const canvas = document.createElement('canvas');
-      qrContainerRef.current.appendChild(canvas);
-      
-      // Generate QR code with black foreground and white background
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const qr = new window.QRious({
-        element: canvas,
-        value: text,
-        size: 300,
-        background: '#ffffff',
-        foreground: '#000000',
-        level: 'M'
-      });
-      
-      // Style the canvas
-      canvas.className = 'w-full h-auto';
-      canvas.style.maxWidth = '300px';
-      canvas.style.height = 'auto';
-      
-    } catch (error) {
-      console.error('Error creating QR code:', error);
-      generateFallbackQR(text);
-    }
-  }, [generateFallbackQR]);
+  const buildQrOptions = (data: string, background: string = effectiveBackground): Options => ({
+    width: 300,
+    height: 300,
+    type: 'svg',
+    data,
+    margin: 10,
+    qrOptions: { errorCorrectionLevel: 'M' },
+    dotsOptions: { color: dotsColor, type: 'square' },
+    backgroundOptions: { color: background },
+    cornersSquareOptions: { color: cornersColor, type: 'square' },
+    cornersDotOptions: { color: cornersColor, type: 'square' },
+  });
 
-  // QR Code generation using QRious library via CDN
-  const generateQRCode = useCallback(async (text: string) => {
-    if (!text.trim()) {
-      if (qrContainerRef.current) {
-        qrContainerRef.current.innerHTML = '';
+  // Build a clean, self-contained SVG (one filled rect per module, no
+  // clip-paths) for the SVG export. The library's own SVG relies on
+  // clip-path references that many vector editors / viewers don't honour,
+  // which collapses the code into solid blocks. This is universally
+  // compatible and uses the same QR algorithm the library does, so it
+  // matches the preview.
+  const buildCleanSvg = (data: string): string => {
+    const qr = qrcode(0, 'M');
+    qr.addData(data);
+    qr.make();
+    const count = qr.getModuleCount();
+    const quiet = 4; // standard 4-module quiet zone
+    const dim = count + quiet * 2;
+
+    const inFinder = (r: number, c: number) =>
+      (r < 7 && c < 7) ||
+      (r < 7 && c >= count - 7) ||
+      (r >= count - 7 && c < 7);
+
+    let dotsPath = '';
+    let cornersPath = '';
+    for (let r = 0; r < count; r++) {
+      for (let c = 0; c < count; c++) {
+        if (!qr.isDark(r, c)) continue;
+        const seg = `M${c + quiet} ${r + quiet}h1v1h-1z`;
+        if (inFinder(r, c)) cornersPath += seg;
+        else dotsPath += seg;
       }
-      return;
     }
 
-    try {
-      // Load QRious library dynamically
-      if (!window.QRious) {
-        const script = document.createElement('script');
-        script.src = 'https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js';
-        script.onload = () => {
-          createQR(text);
-        };
-        document.head.appendChild(script);
-      } else {
-        createQR(text);
-      }
-    } catch (error) {
-      console.error('Error loading QR library:', error);
-      // Fallback to Google Charts API
-      generateFallbackQR(text);
-    }
-  }, [createQR, generateFallbackQR]);
+    const bgRect = transparentBg
+      ? ''
+      : `<rect width="${dim}" height="${dim}" fill="${backgroundColor}"/>`;
+    return (
+      `<?xml version="1.0" encoding="UTF-8"?>\n` +
+      `<svg xmlns="http://www.w3.org/2000/svg" width="300" height="300" ` +
+      `viewBox="0 0 ${dim} ${dim}" shape-rendering="crispEdges">` +
+      `${bgRect}` +
+      `<path fill="${dotsColor}" d="${dotsPath}"/>` +
+      `<path fill="${cornersColor}" d="${cornersPath}"/>` +
+      `</svg>`
+    );
+  };
 
   const formatUrl = (url: string) => {
     if (!url.trim()) return '';
@@ -276,28 +276,74 @@ END:VCARD`;
     }
     
     setQrData(data);
-    generateQRCode(data);
-  }, [activeTab, urlInput, textInput, contactInfo, generateQRCode]);
+  }, [activeTab, urlInput, textInput, contactInfo]);
 
-  const downloadQRCode = () => {
-    if (!qrData) return;
-    
-    const canvas = qrContainerRef.current?.querySelector('canvas');
-    const img = qrContainerRef.current?.querySelector('img');
-    
-    if (canvas) {
-      // Download from canvas
-      const link = document.createElement('a');
-      link.download = `qr-code-${activeTab}.png`;
-      link.href = canvas.toDataURL();
-      link.click();
-    } else if (img) {
-      // Download from image
-      const link = document.createElement('a');
-      link.download = `qr-code-${activeTab}.png`;
-      link.href = img.src;
-      link.click();
+  // Render / update the QR code whenever the data or colors change.
+  useEffect(() => {
+    if (!qrData.trim()) {
+      qrInstanceRef.current = null;
+      return;
     }
+
+    let cancelled = false;
+    const options = buildQrOptions(qrData);
+
+    (async () => {
+      const QRCodeStyling = (await import('qr-code-styling')).default;
+      if (cancelled || !qrContainerRef.current) return;
+
+      if (!qrInstanceRef.current) {
+        qrInstanceRef.current = new QRCodeStyling(options);
+      } else {
+        qrInstanceRef.current.update(options);
+      }
+
+      // The container is conditionally rendered, so re-append on (re)mount.
+      if (qrContainerRef.current.childElementCount === 0) {
+        qrInstanceRef.current.append(qrContainerRef.current);
+      }
+    })();
+
+    return () => {
+      cancelled = true;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [qrData, dotsColor, backgroundColor, cornersColor, transparentBg]);
+
+  const downloadQRCode = async () => {
+    if (!qrData) return;
+    const name = `qr-code-${activeTab}`;
+
+    if (exportFormat === 'svg') {
+      const blob = new Blob([buildCleanSvg(qrData)], { type: 'image/svg+xml' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `${name}.svg`;
+      link.click();
+      URL.revokeObjectURL(url);
+      return;
+    }
+
+    // JPEG has no alpha channel, so a transparent background would render as
+    // black. Fall back to a white background for that one combination.
+    if (exportFormat === 'jpeg' && transparentBg) {
+      const QRCodeStyling = (await import('qr-code-styling')).default;
+      const opaque = new QRCodeStyling(buildQrOptions(qrData, '#ffffff'));
+      await opaque.download({ name, extension: 'jpeg' });
+      return;
+    }
+
+    if (qrInstanceRef.current) {
+      await qrInstanceRef.current.download({ name, extension: exportFormat });
+    }
+  };
+
+  const resetColors = () => {
+    setDotsColor(DEFAULT_COLORS.dots);
+    setBackgroundColor(DEFAULT_COLORS.background);
+    setCornersColor(DEFAULT_COLORS.corners);
+    setTransparentBg(false);
   };
 
   const copyToClipboard = async () => {
@@ -518,7 +564,17 @@ END:VCARD`;
               <div className="brackets p-6 w-full max-w-sm flex flex-col items-center justify-center min-h-[300px] bg-[#0b1419]/50 border border-cyan-500/10 rounded-sm">
                 {qrData ? (
                   <div className="text-center w-full">
-                    <div ref={qrContainerRef} className="flex justify-center p-4 bg-white rounded-sm mb-4 mx-auto w-fit">
+                    <div
+                      ref={qrContainerRef}
+                      className="flex justify-center rounded-sm mb-4 mx-auto w-fit overflow-hidden [&_svg]:max-w-full [&_svg]:h-auto"
+                      style={transparentBg ? {
+                        backgroundColor: '#ffffff',
+                        backgroundImage:
+                          'linear-gradient(45deg,#ccc 25%,transparent 25%),linear-gradient(-45deg,#ccc 25%,transparent 25%),linear-gradient(45deg,transparent 75%,#ccc 75%),linear-gradient(-45deg,transparent 75%,#ccc 75%)',
+                        backgroundSize: '16px 16px',
+                        backgroundPosition: '0 0,0 8px,8px -8px,-8px 0',
+                      } : undefined}
+                    >
                       {/* QR code will be dynamically inserted here */}
                     </div>
                     <p className="text-xs text-slate-500 font-mono">
@@ -535,16 +591,81 @@ END:VCARD`;
                 )}
               </div>
 
+              {/* Color customization */}
+              <div className="w-full max-w-sm space-y-3">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-xs tracking-wider text-cyan-300 uppercase font-semibold flex items-center gap-2">
+                    <Palette className="w-3.5 h-3.5" />
+                    {t('customizeColors')}
+                  </h3>
+                  <button
+                    onClick={resetColors}
+                    className="text-xs text-slate-500 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                  >
+                    <RotateCcw className="w-3 h-3" />
+                    {t('resetColors')}
+                  </button>
+                </div>
+                <div className="grid grid-cols-3 gap-3">
+                  {[
+                    { label: t('codeColor'), value: dotsColor, onChange: setDotsColor, disabled: false },
+                    { label: t('backgroundColor'), value: backgroundColor, onChange: setBackgroundColor, disabled: transparentBg },
+                    { label: t('cornerColor'), value: cornersColor, onChange: setCornersColor, disabled: false },
+                  ].map((swatch) => (
+                    <label
+                      key={swatch.label}
+                      className={`flex flex-col items-center gap-2 bg-[#0b1419] border border-cyan-500/20 rounded-md py-3 transition-colors ${
+                        swatch.disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer hover:border-cyan-500/40'
+                      }`}
+                    >
+                      <span className="text-[10px] uppercase tracking-wider text-slate-400 text-center px-1 leading-tight">
+                        {swatch.label}
+                      </span>
+                      <input
+                        type="color"
+                        value={swatch.value}
+                        disabled={swatch.disabled}
+                        onChange={(e) => swatch.onChange(e.target.value)}
+                        className="w-9 h-9 rounded-md border border-cyan-500/30 bg-transparent cursor-pointer p-0 disabled:cursor-not-allowed"
+                      />
+                    </label>
+                  ))}
+                </div>
+                <label className="flex items-center gap-2 text-xs text-slate-400 cursor-pointer select-none">
+                  <input
+                    type="checkbox"
+                    checked={transparentBg}
+                    onChange={(e) => setTransparentBg(e.target.checked)}
+                    className="accent-cyan-500 w-4 h-4"
+                  />
+                  {t('transparentBackground')}
+                </label>
+              </div>
+
               {qrData && (
                 <div className="flex flex-col sm:flex-row gap-4 w-full max-w-sm">
-                  <button
-                    onClick={downloadQRCode}
-                    className="btn justify-center flex-1"
-                  >
-                    <Download className="w-4 h-4" />
-                    {t('download')}
-                  </button>
-                  
+                  <div className="flex flex-1 gap-2">
+                    <select
+                      value={exportFormat}
+                      onChange={(e) => setExportFormat(e.target.value as FileExtension)}
+                      aria-label={t('exportFormat')}
+                      className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-3 text-sm text-slate-200 focus:outline-none focus:ring-2 focus:ring-cyan-400 cursor-pointer"
+                    >
+                      {EXPORT_FORMATS.map((f) => (
+                        <option key={f.value} value={f.value}>
+                          {f.label}
+                        </option>
+                      ))}
+                    </select>
+                    <button
+                      onClick={downloadQRCode}
+                      className="btn justify-center flex-1"
+                    >
+                      <Download className="w-4 h-4" />
+                      {t('download')}
+                    </button>
+                  </div>
+
                   <button
                     onClick={copyToClipboard}
                     className="btn justify-center flex-1 bg-transparent border-slate-700 text-slate-300 hover:border-cyan-500 hover:text-cyan-950"
