@@ -200,7 +200,7 @@ const QRCodeGenerator = () => {
     qr.addData(data);
     qr.make();
     const count = qr.getModuleCount();
-    const quiet = 4; // standard 4-module quiet zone
+    const quiet = 0; // no quiet zone: SVG export is cropped tight to the modules
     const dim = count + quiet * 2;
 
     const inFinder = (r: number, c: number) =>
