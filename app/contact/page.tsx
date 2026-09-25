@@ -1,4 +1,9 @@
-export const metadata = { title: "Contact" };
+export const metadata = {
+  title: "Contact",
+  description:
+    "Start a website project with Rogue Salad Productions. Discuss scope, timeline, and budget, or get an instant estimate first.",
+  alternates: { canonical: "/contact" },
+};
 
 import Link from "next/link";
 import ContactForm from "@/app/contact/ContactForm";

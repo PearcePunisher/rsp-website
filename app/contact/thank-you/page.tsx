@@ -20,7 +20,7 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
     <div className="container-max py-16 space-y-10 max-w-2xl">
       <header className="space-y-3">
         <h1 className="font-display tracking-wide text-cyan-300">Transmission Received</h1>
-        <p className="text-slate-300 text-sm">Thanks {fname}! Your message is logged in the queue. I typically respond within 1–2 business days.</p>
+        <p className="text-slate-300 text-sm">Thanks {fname}! Your message is logged in the queue. I typically respond within 1-2 business days.</p>
       </header>
       <section className="panel rounded-md p-6 space-y-4 text-sm">
         <h2 className="font-display tracking-wide text-cyan-300 text-base">Direct Channels</h2>
@@ -29,9 +29,9 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
           <li><span className="text-slate-400">Site:</span> <Link href="/work" className="text-cyan-300 underline">Case Studies</Link></li>
           <li><span className="text-slate-400">Services:</span> <Link href="/services" className="text-cyan-300 underline">What I Offer</Link></li>
         </ul>
-        <p className="text-[11px] text-slate-500">If you don&apos;t see a reply, check spam or email me directly. Appreciate the reach-out.</p>
+        <p className="text-[11px] text-slate-400">If you don&apos;t see a reply, check spam or email me directly. Appreciate the reach-out.</p>
       </section>
-      <div className="text-xs text-slate-500">Return to <Link href="/" className="text-cyan-300 underline">home</Link>.</div>
+      <div className="text-xs text-slate-400">Return to <Link href="/" className="text-cyan-300 underline">home</Link>.</div>
     </div>
   );
 }

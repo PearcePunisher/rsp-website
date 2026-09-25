@@ -409,7 +409,7 @@ export default function QuoteBuilder() {
             Book your free onboarding call
           </Link>
           {canHandoff && (
-            <p className="text-xs text-slate-500 text-center">
+            <p className="text-xs text-slate-400 text-center">
               Your estimate will be added to the contact form.
             </p>
           )}

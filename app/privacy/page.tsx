@@ -58,7 +58,7 @@ export default function PrivacyPage() {
           <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><br />
           {CONTACT_PHONE && <span>{CONTACT_PHONE}</span>}
         </p>
-        <p className="text-xs text-slate-500 mt-8">Last updated: {EFFECTIVE_DATE}</p>
+        <p className="text-xs text-slate-400 mt-8">Last updated: {EFFECTIVE_DATE}</p>
       </section>
       <div className="pt-4 border-t border-cyan-500/20">
         <Link href="/" className="text-xs text-cyan-300 hover:underline">← Home</Link>

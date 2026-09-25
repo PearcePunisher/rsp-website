@@ -3,8 +3,16 @@ import path from "node:path";
 import Link from "next/link";
 import { type SanityDocument } from "next-sanity";
 import Image from "next/image";
+import { RevealGroup, RevealItem } from "@/app/components/Reveal";
 
 import { client } from "@/src/sanity/client";
+
+export const metadata = {
+  title: "Work: Web Development Case Studies",
+  description:
+    "Case studies of websites, apps, and digital products built with WordPress (Oxygen), Next.js, and React by Rogue Salad Productions.",
+  alternates: { canonical: "/work" },
+};
 
 function localAssetExists(publicPath: string) {
   if (!publicPath.startsWith("/")) return true; // remote (Sanity) URLs
@@ -36,7 +44,7 @@ const STATIC_WORK = [
     slug: { current: "credo-tri-indy-car" },
     coverUrl: "/work/credo/cover.webp",
     summary:
-      "A white-label mobile app platform for racing teams — currently powering Juncos Hollinger Racing's fan & VIP experience.",
+      "A white-label mobile app platform for racing teams, currently powering Juncos Hollinger Racing's fan & VIP experience.",
     category: "Mobile App",
   },
 ];
@@ -64,15 +72,15 @@ export default async function IndexPage() {
       <header className="space-y-2">
         <h1 className="font-display tracking-wide">Work Archive</h1>
         <p className="text-slate-400 max-w-prose text-sm">
-          Browse projects by category. Filters & search coming soon.
+          Websites, apps, and digital products I&apos;ve designed and built.
         </p>
       </header>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <RevealGroup className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {work.map((work) => (
+          <RevealItem key={work.slug.current}>
           <Link
-            key={work.slug.current}
             href={`/work/${work.slug.current}`}
-            className="panel brackets rounded-md p-4 group">
+            className="panel brackets lift rounded-md p-4 group block h-full">
             <div
               className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"
               aria-hidden>
@@ -87,7 +95,7 @@ export default async function IndexPage() {
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center border border-dashed border-cyan-500/20 m-2 rounded-sm">
-                  <span className="text-[10px] tracking-widest text-slate-600">
+                  <span className="text-xs tracking-widest text-slate-400">
                     IMAGE PENDING
                   </span>
                 </div>
@@ -103,8 +111,9 @@ export default async function IndexPage() {
               {work.category}
             </span>
           </Link>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
     </div>
   );
 }

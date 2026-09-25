@@ -1,26 +1,28 @@
 import { client } from "@/src/sanity/client";
 import SectionHeader from "./components/SectionHeader";
+import { Reveal, RevealGroup, RevealItem } from "./components/Reveal";
 import Link from "next/link";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Rogue Salad Productions — Freelance Web Development & Design",
+  title: "Rogue Salad Productions: Freelance Web Development & Design",
   description:
     "Rogue Salad Productions builds fast, accessible, SEO-friendly websites and interfaces. Specialties: Next.js front-ends, WordPress implementation, performance optimization, UI/UX design, and technical consulting for startups and agencies.",
   openGraph: {
-    title: "Rogue Salad Productions — Fast, Accessible Web Development",
+    title: "Rogue Salad Productions: Fast, Accessible Web Development",
     description:
       "WordPress (Oxygen) and Next.js websites and performance-first front-ends. Case studies, services, and consulting for product teams and founders.",
     images: ["/rsp-logo.png"],
   },
+  alternates: { canonical: "/" },
 };
 
 const ldJson = {
   "@context": "https://schema.org",
   "@type": "Organization",
   name: "Rogue Salad Productions",
-  url: "https://roguesalad.co",
-  logo: "/rsp-logo.png",
+  url: "https://www.roguesalad.co",
+  logo: "https://www.roguesalad.co/rsp-logo.png",
 };
 
 const FEATURED_WORK_QUERY = `*[_type == "work" && defined(slug.current)]
@@ -51,35 +53,30 @@ export default async function Home() {
       {/* Hero */}
       <section className="container-max pt-20 relative">
         <div className="mb-10 max-w-4xl">
-          <h1 className="font-display tracking-wider">
-            <span className="block text-cyan-300">ROGUE SALAD PRODUCTIONS</span>
-            Freelance Web Development & Design
-          </h1>
-          <p className="mt-6 text-slate-400 max-w-prose">
-            Performance-first, accessible, and SEO-friendly websites built on
-            platforms like WordPress (Oxygen) or Next.js — or tailored to your
-            preferred stack for startups, agencies, and product teams.
-          </p>
-          <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/work"
-              className="btn"
-              aria-label="Portfolio — Case studies and results">
-              Portfolio — Case Studies
-            </Link>
-            <Link
-              href="/quote"
-              className="btn"
-              aria-label="Get an instant website cost estimate">
+          <Reveal trigger="load">
+            <h1 className="font-display tracking-wider">
+              <span className="block text-cyan-300 text-base md:text-lg tracking-[0.3em] mb-4">
+                ROGUE SALAD PRODUCTIONS
+              </span>
+              <span className="block text-4xl md:text-5xl lg:text-6xl leading-[1.1]">
+                Freelance Web Development & Design
+              </span>
+            </h1>
+          </Reveal>
+          <Reveal trigger="load" delay={0.1}>
+            <p className="mt-6 text-slate-400 max-w-prose">
+              Fast, accessible, SEO-friendly websites built on WordPress (Oxygen), Next.js, or your
+              preferred stack, for startups, agencies, and product teams.
+            </p>
+          </Reveal>
+          <Reveal trigger="load" delay={0.2} className="mt-8 flex flex-wrap gap-4">
+            <Link href="/quote" className="btn btn-primary">
               Get an Estimate
             </Link>
-            <Link
-              href="/contact"
-              className="btn"
-              aria-label="Hire a web developer, start a conversation">
-              Hire a Web Developer — Let&apos;s Talk
+            <Link href="/work" className="btn">
+              Case Studies
             </Link>
-          </div>
+          </Reveal>
         </div>
         <div
           className="absolute inset-0 -z-10 opacity-40 pointer-events-none"
@@ -92,27 +89,30 @@ export default async function Home() {
         className="container-max"
         aria-labelledby="featured-work-heading">
         <SectionHeader
+          id="featured-work-heading"
           label="Module"
           title="Featured Work"
           intro="Selected case studies: performance-focused websites and digital products built with WordPress (Oxygen), Next.js, or other modern platforms, accessibility-first UX, and measurable results."
         />
-        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+        <RevealGroup className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p) => (
+            <RevealItem key={p.slug}>
             <Link
-              key={p.slug}
               href={`/work/${p.slug}`}
-              className="panel brackets rounded-md p-4 group focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
+              className="panel brackets lift rounded-md p-4 group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
               <div
                 className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"
                 aria-hidden>
-                <Image
-                  src={p.coverUrl || "/next.svg"}
-                  alt={`${p.title} — screenshot of responsive homepage`}
-                  fill
-                  className="object-cover"
-                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  priority={false}
-                />
+                {p.coverUrl && (
+                  <Image
+                    src={p.coverUrl}
+                    alt={`${p.title} project cover`}
+                    fill
+                    className="object-cover"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    priority={false}
+                  />
+                )}
               </div>
               <h3 className="text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors">
                 {p.title}
@@ -126,44 +126,48 @@ export default async function Home() {
                 ))}
               </ul>
             </Link>
+            </RevealItem>
           ))}
-        </div>
+        </RevealGroup>
         <div className="mt-8">
           <Link href="/work" className="text-cyan-300 text-sm hover:underline">
-            All Portfolio Case Studies — Web Development →
+            All case studies →
           </Link>
         </div>
       </section>
-      {/* Services */}
+      {/* Services: asymmetric pair (large lead cell + two stacked); single column on mobile */}
       <section className="container-max" aria-labelledby="services-heading">
         <SectionHeader
-          label="Capabilities"
+          id="services-heading"
           title="Services"
-          intro="Core disciplines we deploy to execute stealth-clear visuals."
+          intro="What I build, design, and advise on."
         />
-        <div className="grid gap-8 md:grid-cols-3">
-          {[
-            {
-              title: "Web Development",
-              body: "WordPress (Oxygen), Next.js & React development — responsive, SEO-minded front-ends, performance optimization, and CMS integrations. Able to build on the platform you prefer.",
-            },
-            {
-              title: "Design",
-              body: "UI/UX design and prototyping — visually clear interfaces focused on usability, conversions, and brand consistency.",
-            },
-            {
-              title: "Consulting",
-              body: "Technical & product consulting — architecture reviews, SEO & accessibility audits, and roadmaps to scale your web product.",
-            },
-          ].map((s) => (
-            <div key={s.title} className="panel rounded-md p-6 brackets">
-              <h3 className="font-display text-lg tracking-wide mb-2 text-cyan-300">
-                {s.title}
-              </h3>
-              <p className="text-sm text-slate-400">{s.body}</p>
-            </div>
-          ))}
-        </div>
+        <RevealGroup className="grid gap-6 grid-cols-1 md:grid-cols-[1.4fr_1fr]">
+          <RevealItem className="panel brackets rounded-md p-8 md:row-span-2 flex flex-col justify-end min-h-[16rem] bg-[radial-gradient(circle_at_20%_15%,rgba(34,211,238,0.14),transparent_60%)]">
+            <h3 className="font-display text-2xl tracking-wide mb-3 text-cyan-300">
+              Web Development
+            </h3>
+            <p className="text-slate-300 max-w-prose">
+              WordPress (Oxygen), Next.js, and React development: responsive, SEO-minded
+              front-ends, performance optimization, and CMS integrations. Able to build on the
+              platform you prefer.
+            </p>
+          </RevealItem>
+          <RevealItem className="panel rounded-md p-6">
+            <h3 className="font-display text-lg tracking-wide mb-2 text-cyan-300">Design</h3>
+            <p className="text-sm text-slate-400">
+              UI/UX design and prototyping: visually clear interfaces focused on usability,
+              conversions, and brand consistency.
+            </p>
+          </RevealItem>
+          <RevealItem className="panel rounded-md p-6 bg-[linear-gradient(135deg,transparent_55%,rgba(14,116,144,0.18))]">
+            <h3 className="font-display text-lg tracking-wide mb-2 text-cyan-300">Consulting</h3>
+            <p className="text-sm text-slate-400">
+              Technical and product consulting: architecture reviews, SEO and accessibility
+              audits, and roadmaps to scale your web product.
+            </p>
+          </RevealItem>
+        </RevealGroup>
         <div className="mt-8">
           <Link href="/services" className="text-cyan-300 text-sm hover:underline">
             All Services →
@@ -172,13 +176,9 @@ export default async function Home() {
       </section>
       {/* About teaser */}
       <section className="container-max" aria-labelledby="about-teaser-heading">
-        <SectionHeader
-          label="Intel"
-          title="About"
-          intro="About — Principles & process for building clear, fast, and accessible web experiences. Learn how we plan projects, prioritize performance, and measure success."
-        />
-        <div className="grid md:grid-cols-2 gap-10 items-start">
-          <div className="space-y-4 text-sm text-slate-300 max-w-prose">
+        <SectionHeader id="about-teaser-heading" title="About" />
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-10 items-start">
+          <Reveal className="space-y-4 text-sm text-slate-300 max-w-prose">
             <p>
               I’m Riley Pearce, a senior web developer with a passion for
               building clean, modern, and high-performing websites. With years
@@ -195,21 +195,19 @@ export default async function Home() {
               content systems to crafting intuitive interfaces, I thrive on
               solving technical challenges with creative, practical solutions.
               Whether it’s custom web applications, dynamic WordPress builds, or
-              seamless API integrations, I deliver projects that combine
+              API integrations, I deliver projects that combine
               technical precision with thoughtful design.
             </p>
             <p>
               <Link href="/about" className="text-cyan-300 underline">
-                About — Principles & Process →
+                More about me →
               </Link>
             </p>
-          </div>
-          <div
-            className="relative aspect-[4/3] rounded-md panel overflow-hidden"
-            aria-label="Portrait of Riley Pearce">
+          </Reveal>
+          <Reveal className="relative aspect-[4/3] rounded-md panel overflow-hidden">
             <Image
               src="/riley-4-3.webp"
-              alt="Riley Pearce — portrait"
+              alt="Portrait of Riley Pearce"
               fill
               className="object-cover filter grayscale contrast-95"
               priority={false}
@@ -220,7 +218,7 @@ export default async function Home() {
               className="absolute inset-0 bg-cyan-300/6 mix-blend-screen pointer-events-none"
               aria-hidden
             />
-          </div>
+          </Reveal>
         </div>
       </section>
     </div>

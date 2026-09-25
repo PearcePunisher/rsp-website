@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { client } from "@/src/sanity/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -30,6 +31,32 @@ type WorkDoc = {
   credits?: { name: string; url?: string; role: string }[];
 };
 
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const project = await client.fetch<WorkDoc | null>(POST_QUERY, await params, options);
+  if (!project) return {};
+  const title = `${project.title}: Case Study`;
+  return {
+    title,
+    description: project.summary,
+    alternates: { canonical: `/work/${project.slug}` },
+    openGraph: {
+      title,
+      description: project.summary,
+      url: `/work/${project.slug}`,
+      ...(project.coverUrl && { images: [project.coverUrl] }),
+    },
+    twitter: {
+      title,
+      description: project.summary,
+      ...(project.coverUrl && { images: [project.coverUrl] }),
+    },
+  };
+}
+
 export default async function PostPage({
   params,
 }: {
@@ -51,8 +78,22 @@ export default async function PostPage({
     }
   }
 
+  const workLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.summary,
+    url: `https://www.roguesalad.co/work/${project.slug}`,
+    ...(project.coverUrl && { image: project.coverUrl }),
+    creator: { "@type": "Organization", name: "Rogue Salad Productions", url: "https://www.roguesalad.co" },
+  };
+
   return (
     <article className="container-max py-16 space-y-10">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(workLd) }}
+      />
       <header>
         <h1 className="font-display tracking-wide mb-2">{project.title}</h1>
         {project.summary && (
@@ -159,7 +200,7 @@ export default async function PostPage({
                 ))}
             </ul>
           )}
-          <p className="mt-4 text-xs text-slate-500">
+          <p className="mt-4 text-xs text-slate-400">
             Some links may be affiliate links and using them helps support my cats, Ripley and Void.
           </p>
         </section>
@@ -198,11 +239,11 @@ export default async function PostPage({
       <section className="panel rounded-md p-8 text-center space-y-3 mt-12">
         <h2 className="font-display tracking-wide text-lg">Want a website like this one?</h2>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/quote" className="btn" aria-label="Get an instant website cost estimate">
+          <Link href="/quote" className="btn btn-primary">
             Get an Estimate
           </Link>
-          <Link href="/contact" className="btn" aria-label="Contact — Start a project">
-            Let&apos;s chat
+          <Link href="/contact" className="btn">
+            Let&apos;s Talk
           </Link>
         </div>
       </section>

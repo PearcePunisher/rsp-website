@@ -146,8 +146,8 @@ export default function ContactForm() {
           <option value="<2k">Under 2k</option>
           <option value="<2-5k">2-5k</option>
           <option value="<5-10k">5-10k</option>
-          <option value="10-25k">10–25k</option>
-          <option value="25-50k">25–50k</option>
+          <option value="10-25k">10-25k</option>
+          <option value="25-50k">25-50k</option>
           <option value=">50k">50k+</option>
         </select>
       </div>
@@ -182,7 +182,7 @@ export default function ContactForm() {
         disabled={loading}>
         {loading ? "Transmitting…" : "Transmit"}
       </button>
-      <p id="privacy-note" className="text-[11px] text-slate-500">
+      <p id="privacy-note" className="text-[11px] text-slate-400">
         We store your submission solely for direct correspondence.
       </p>
     </form>

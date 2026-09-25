@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { PortableText } from 'next-sanity';
 import Image from 'next/image';
 import Link from 'next/link';
@@ -6,6 +7,8 @@ import { notFound } from 'next/navigation';
 
 const PAGE_QUERY = `*[_type == "page" && slug.current == $slug][0]{
   _id,
+  _createdAt,
+  _updatedAt,
   title,
   "slug": slug.current,
   seoDescription,
@@ -51,6 +54,8 @@ interface ImageValue { asset?: { url?: string } }
 type ImageSection = { _type: 'imageSection'; image?: ImageValue; alt?: string; caption?: string; fullWidth?: boolean; credit?: string };
 type PageDoc = {
   _id: string;
+  _createdAt?: string;
+  _updatedAt?: string;
   title: string;
   slug: string;
   seoDescription?: string;
@@ -58,12 +63,58 @@ type PageDoc = {
   sections?: (BlockSection | QuoteSection | CtaSection | ImageSection)[];
 };
 
+export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
+  const page = await client.fetch<PageDoc | null>(PAGE_QUERY, await params, options);
+  if (!page) return {};
+  const image = page.heroImage?.asset?.url;
+  return {
+    title: page.title,
+    description: page.seoDescription,
+    alternates: { canonical: `/blog/${page.slug}` },
+    openGraph: {
+      type: 'article',
+      title: page.title,
+      description: page.seoDescription,
+      url: `/blog/${page.slug}`,
+      publishedTime: page._createdAt,
+      modifiedTime: page._updatedAt,
+      ...(image && { images: [image] }),
+    },
+    twitter: {
+      title: page.title,
+      description: page.seoDescription,
+      ...(image && { images: [image] }),
+    },
+  };
+}
+
 export default async function PageView({ params }: { params: Promise<{ slug: string }> }) {
   const page = await client.fetch<PageDoc>(PAGE_QUERY, await params, options);
   if (!page) notFound();
 
+  const postLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BlogPosting',
+    headline: page.title,
+    description: page.seoDescription,
+    url: `https://www.roguesalad.co/blog/${page.slug}`,
+    datePublished: page._createdAt,
+    dateModified: page._updatedAt,
+    ...(page.heroImage?.asset?.url && { image: page.heroImage.asset.url }),
+    author: { '@type': 'Person', name: 'Riley Pearce', url: 'https://www.roguesalad.co/about' },
+    publisher: {
+      '@type': 'Organization',
+      name: 'Rogue Salad Productions',
+      logo: { '@type': 'ImageObject', url: 'https://www.roguesalad.co/rsp-logo.png' },
+    },
+  };
+
   return (
     <article className="container-max py-16 space-y-10 max-w-3xl">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(postLd) }}
+      />
       <header className="space-y-2">
         <h1 className="font-display tracking-wide">{page.title}</h1>
         {page.seoDescription && (
@@ -98,7 +149,7 @@ export default async function PageView({ params }: { params: Promise<{ slug: str
                   <figure key={idx} className="panel rounded-md p-6 space-y-3">
                     {s.quote && <blockquote className="text-lg font-medium leading-relaxed">“{s.quote}”</blockquote>}
                     {(s.author || s.role) && (
-                      <figcaption className="text-xs text-slate-500">
+                      <figcaption className="text-xs text-slate-400">
                         {s.author}{s.role ? `, ${s.role}` : ''}
                       </figcaption>
                     )}
@@ -131,9 +182,9 @@ export default async function PageView({ params }: { params: Promise<{ slug: str
                       <Image src={src} alt={s.alt || page.title} fill className="object-cover" />
                     </div>
                     {(s.caption || s.credit) && (
-                      <figcaption className="mt-2 text-[11px] text-slate-500">
+                      <figcaption className="mt-2 text-[11px] text-slate-400">
                         {s.caption}
-                        {s.credit && <span className="ml-1 text-slate-600">© {s.credit}</span>}
+                        {s.credit && <span className="ml-1 text-slate-400">© {s.credit}</span>}
                       </figcaption>
                     )}
                   </figure>

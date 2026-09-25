@@ -2,7 +2,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import ScrambleText from "@/app/components/ScrambleText";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
@@ -67,7 +67,7 @@ export default function NavBar() {
                 >
                   <ScrambleText text={l.label} enabled />
                   {active && (
-                    <motion.span layoutId="nav-underline" className="absolute left-0 -bottom-0.5 h-px w-full bg-cyan-400 shadow-[0_0_6px_-1px_#22D3EE]" />
+                    <m.span layoutId="nav-underline" className="absolute left-0 -bottom-0.5 h-px w-full bg-cyan-400 shadow-[0_0_6px_-1px_#22D3EE]" />
                   )}
                 </Link>
               </li>
@@ -77,7 +77,7 @@ export default function NavBar() {
         {/* Mobile toggle */}
         <button
           type="button"
-          className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-sm border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+          className="md:hidden inline-flex items-center justify-center h-10 w-10 rounded-full border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400"
           aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
           aria-controls="mobile-nav-panel"
@@ -91,7 +91,7 @@ export default function NavBar() {
     <AnimatePresence>
       {open && (
         <>
-          <motion.div
+          <m.div
             aria-hidden
             className="fixed inset-0 z-[100] bg-black/80 backdrop-blur-sm md:hidden"
             initial={{ opacity:0 }}
@@ -99,7 +99,7 @@ export default function NavBar() {
             exit={{ opacity:0 }}
             onClick={()=> setOpen(false)}
           />
-          <motion.nav
+          <m.nav
             id="mobile-nav-panel"
             role="dialog"
             aria-modal="true"
@@ -114,7 +114,7 @@ export default function NavBar() {
               type="button"
               onClick={()=> setOpen(false)}
               aria-label="Close navigation"
-              className="absolute top-4 right-4 h-10 w-10 inline-flex items-center justify-center rounded-sm border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400"
+              className="absolute top-4 right-4 h-10 w-10 inline-flex items-center justify-center rounded-full border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400"
             >
               <X size={22} />
             </button>
@@ -136,8 +136,8 @@ export default function NavBar() {
                 );
               })}
             </ul>
-            <p className="text-[10px] tracking-widest text-slate-500 mt-10">© {new Date().getFullYear()} Rogue Salad</p>
-          </motion.nav>
+            <p className="text-[10px] tracking-widest text-slate-400 mt-10">© {new Date().getFullYear()} Rogue Salad</p>
+          </m.nav>
         </>
       )}
     </AnimatePresence>

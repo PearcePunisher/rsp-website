@@ -1,6 +1,14 @@
 import Link from 'next/link';
 import Image from 'next/image';
+import { RevealGroup, RevealItem } from '@/app/components/Reveal';
 import { client } from '@/src/sanity/client';
+
+export const metadata = {
+  title: 'Blog',
+  description:
+    'Reviews, guides, and notes on WordPress, Oxygen Builder, hosting, and hiring a web developer.',
+  alternates: { canonical: '/blog' },
+};
 
 // Supports both legacy `post` documents with `mainImage` and new `page` documents with `heroImage`
 // Pages-only listing (blog now powered solely by `page` documents)
@@ -29,11 +37,12 @@ export default async function BlogIndex() {
         <h1 className="font-display tracking-wide">Blog</h1>
         <p className="text-slate-400 max-w-prose text-sm">Recent posts and essays.</p>
       </header>
-      <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
+      <RevealGroup className="grid gap-8 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
         {posts.map((p) => {
           const date = p._createdAt;
           return (
-          <Link key={p.slug} href={`/blog/${p.slug}`} className="panel brackets rounded-md p-4 group">
+          <RevealItem key={p.slug}>
+          <Link href={`/blog/${p.slug}`} className="panel brackets lift rounded-md p-4 group block h-full">
             <div className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden" aria-hidden>
               {p.imageUrl && (
                 <Image src={p.imageUrl} alt={p.title} fill className="object-cover rounded-sm" sizes="(max-width: 640px) 100vw, 50vw" />
@@ -43,8 +52,9 @@ export default async function BlogIndex() {
             <p className="text-xs text-slate-400 mt-1 line-clamp-3">{p.excerpt}</p>
             {date && <span className="mt-3 inline-block text-[10px] text-cyan-300/70 tracking-widest">{new Date(date).toLocaleDateString()}</span>}
           </Link>
+          </RevealItem>
         )})}
-      </div>
+      </RevealGroup>
     </div>
   );
 }
