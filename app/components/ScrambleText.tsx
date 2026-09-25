@@ -8,7 +8,8 @@ const CHARS = "ABCDEFGHIKLMNOPQRSTUVWXYZ1234567890<>/[]{}".split("");
 export default function ScrambleText({ text, enabled = false, className }: Props) {
   const [display, setDisplay] = useState(text);
   useEffect(() => {
-    if (!enabled) { setDisplay(text); return; }
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!enabled || reduce) { setDisplay(text); return; }
     let frame = 0;
     const orig = text;
     const id = setInterval(() => {

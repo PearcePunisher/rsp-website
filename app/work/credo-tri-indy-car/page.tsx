@@ -5,15 +5,16 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Racing Hospitality — White-Label Racing Team App",
+  title: "Racing Hospitality: White-Label Racing Team App",
   description:
-    "A white-label mobile app platform for professional racing teams, built in collaboration with Alexander Bisant. Currently powers Juncos Hollinger Racing's fan and VIP hospitality experience — live race data, driver profiles, VIP booking, QR check-in, and real-time fan chat, all rebrandable per team from a single codebase.",
+    "A white-label mobile app platform for professional racing teams, built in collaboration with Alexander Bisant. Currently powers Juncos Hollinger Racing's fan and VIP hospitality experience: live race data, driver profiles, VIP booking, QR check-in, and real-time fan chat, all rebrandable per team from a single codebase.",
   openGraph: {
-    title: "Racing Hospitality — White-Label Racing Team App",
+    title: "Racing Hospitality: White-Label Racing Team App",
     description:
-      "One React Native codebase, rebranded and re-backended per racing team. Live schedules, VIP experiences, QR check-in, real-time chat, and more — currently powering Juncos Hollinger Racing.",
+      "One React Native codebase, rebranded and re-backended per racing team. Live schedules, VIP experiences, QR check-in, real-time chat, and more, currently powering Juncos Hollinger Racing.",
     images: ["/work/credo/cover.webp"],
   },
+  alternates: { canonical: "/work/credo-tri-indy-car" },
 };
 
 const ASSET_DIR = path.join(process.cwd(), "public", "work", "credo");
@@ -50,7 +51,7 @@ function Shot({
         />
       ) : (
         <div className="absolute inset-0 flex items-center justify-center border border-dashed border-cyan-500/20 m-2 rounded-sm">
-          <span className="text-[11px] tracking-widest text-slate-600 text-center px-4">
+          <span className="text-xs tracking-widest text-slate-400 text-center px-4">
             SCREENSHOT PENDING
             <br />
             {label}
@@ -72,7 +73,7 @@ const FEATURES = [
   },
   {
     title: "Car Gallery",
-    body: "High-resolution showcase of team cars — swappable per season, livery, or sponsor deal.",
+    body: "High-resolution showcase of team cars, swappable per season, livery, or sponsor deal.",
   },
   {
     title: "Interactive Track Map",
@@ -88,7 +89,7 @@ const FEATURES = [
   },
   {
     title: "Real-Time Fan Chat",
-    body: "Stream Chat-powered messaging so fans can talk race weekend live — typing indicators, reactions, and read receipts included.",
+    body: "Stream Chat-powered messaging so fans can talk race weekend live, with typing indicators, reactions, and read receipts included.",
   },
   {
     title: "Push Notifications",
@@ -96,7 +97,7 @@ const FEATURES = [
   },
   {
     title: "Staff Directory & Directions",
-    body: "Who to find on-site, and how to get there — built for the reality of a race weekend, not just the couch.",
+    body: "Who to find on-site, and how to get there. Built for the reality of a race weekend, not just the couch.",
   },
   {
     title: "Onboarding & FAQ",
@@ -120,11 +121,11 @@ export default function CredoWorkPage() {
     <article className="container-max py-16 space-y-16 max-w-4xl">
       <header className="space-y-6">
         <div>
-          <span className="text-cyan-300 text-[10px] tracking-[0.25em] font-medium">
-            CASE STUDY — MOBILE APP
+          <span className="text-cyan-300 text-xs tracking-[0.25em] font-medium">
+            CASE STUDY: MOBILE APP
           </span>
           <h1 className="font-display tracking-wide mt-2">
-            Racing Hospitality App — One Codebase, Any Team
+            Racing Hospitality App: One Codebase, Any Team
           </h1>
           <p className="text-slate-400 mt-2 text-sm max-w-prose">
             A white-label mobile app platform for professional racing teams.
@@ -150,7 +151,7 @@ export default function CredoWorkPage() {
             </li>
           ))}
         </ul>
-        <p className="text-xs text-slate-500">
+        <p className="text-xs text-slate-400">
           Built in collaboration with{" "}
           <span className="text-slate-300">Alexander Bisant</span>{" "}
           (Backend Engineer).
@@ -159,7 +160,7 @@ export default function CredoWorkPage() {
 
       <Shot
         file="cover.webp"
-        alt="Credo Tri IndyCar app — home screen with race countdown"
+        alt="Credo Tri IndyCar app home screen with race countdown"
         label="Home screen / race countdown"
       />
 
@@ -205,7 +206,7 @@ export default function CredoWorkPage() {
         <Shot
           file="theming.webp"
           alt="Side-by-side comparison of two client themes in the app"
-          label="White-label theming — two brands, one codebase"
+          label="White-label theming: two brands, one codebase"
           className="sm:col-span-2"
         />
       </section>
@@ -290,8 +291,8 @@ export default function CredoWorkPage() {
           If you&apos;ve got something specific in mind, let&apos;s talk
           about it.
         </p>
-        <Link href="/contact" className="btn" aria-label="Contact — Start a custom project">
-          Let&apos;s build something
+        <Link href="/contact" className="btn">
+          Let&apos;s Talk
         </Link>
       </section>
 

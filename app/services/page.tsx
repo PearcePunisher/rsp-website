@@ -1,10 +1,11 @@
 import Link from "next/link";
+import { RevealGroup, RevealItem } from "@/app/components/Reveal";
 export const metadata = {
-  title: "Services — Web Development, WordPress, Next.js, SEO",
+  title: "Services: Web Development, WordPress, Next.js, SEO",
   description:
     "Freelance web development and design: Next.js/React front‑ends, WordPress (Oxygen) builds, performance optimization, accessibility, UI/UX, and SEO consulting.",
   openGraph: {
-    title: "Services — Fast, Accessible Web Development",
+    title: "Services: Fast, Accessible Web Development",
     description:
       "WordPress (Oxygen) and Next.js websites, Core Web Vitals optimization, accessibility, UI/UX design, and technical consulting.",
     images: ["/rsp-logo.png"],
@@ -22,7 +23,7 @@ const services = [
       "Accessibility (WCAG) standards",
       "TypeScript + testing setup",
     ],
-    timeline: "2–8 weeks typical",
+    timeline: "2-8 weeks typical",
   },
   {
     title: "WordPress Development (Oxygen / ACF)",
@@ -34,7 +35,7 @@ const services = [
       "Editor experience & training",
       "Migrations & redirects",
     ],
-    timeline: "2–6 weeks typical",
+    timeline: "2-6 weeks typical",
   },
   {
     title: "Performance Optimization & SEO",
@@ -46,7 +47,7 @@ const services = [
       "Schema.org structured data",
       "On‑page SEO improvements",
     ],
-    timeline: "1–3 weeks typical",
+    timeline: "1-3 weeks typical",
   },
   {
     title: "UI/UX Design",
@@ -58,7 +59,7 @@ const services = [
       "Interactive prototypes",
       "Interaction polish",
     ],
-    timeline: "1–4 weeks typical",
+    timeline: "1-4 weeks typical",
   },
   {
     title: "Technical Consulting & Audits",
@@ -70,7 +71,7 @@ const services = [
       "SEO/site health report",
       "Roadmap & prioritization",
     ],
-    timeline: "1–2 weeks typical",
+    timeline: "1-2 weeks typical",
   },
   {
     title: "E‑Commerce (WooCommerce)",
@@ -82,14 +83,14 @@ const services = [
       "Payment integrations",
       "Analytics & events",
     ],
-    timeline: "3–8 weeks typical",
+    timeline: "3-8 weeks typical",
   },
 ];
 const ldJson = {
   "@context": "https://schema.org",
   "@type": "ProfessionalService",
   name: "Rogue Salad Productions",
-  url: "https://roguesalad.co/services",
+  url: "https://www.roguesalad.co/services",
   areaServed: "Global",
   serviceType: services.map((s) => s.title),
   hasOfferCatalog: {
@@ -115,12 +116,12 @@ export default function ServicesPage(){
       <header className="space-y-2 max-w-3xl">
         <h1 className="font-display tracking-wide">Services</h1>
         <p className="text-slate-400 text-sm">
-          Web development, WordPress (Oxygen), Next.js, performance optimization, accessibility, UI/UX, and SEO consulting — focused on speed, clarity, and measurable outcomes.
+          Web development, WordPress (Oxygen), Next.js, performance optimization, accessibility, UI/UX, and SEO consulting, focused on speed, clarity, and measurable outcomes.
         </p>
       </header>
-      <div className="grid gap-10 md:grid-cols-2 xl:grid-cols-3">
+      <RevealGroup className="grid gap-10 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
         {services.map(s => (
-          <div key={s.title} className="panel brackets rounded-md p-6 flex flex-col gap-4">
+          <RevealItem key={s.title} className="panel brackets rounded-md p-6 flex flex-col gap-4">
             <div>
               <h2 className="font-display tracking-wide text-base text-cyan-300 mb-1">{s.title}</h2>
               <p className="text-xs text-slate-400 leading-relaxed">{s.summary}</p>
@@ -130,16 +131,16 @@ export default function ServicesPage(){
             </ul>
             <div className="flex items-center justify-between text-[11px] text-slate-400 mt-auto pt-2 border-t border-cyan-500/20">
               <span>{s.timeline}</span>
-              <Link href="/contact" className="text-cyan-300 hover:underline" aria-label={`Discuss ${s.title}`}>Inquire →</Link>
+              <Link href="/contact" className="text-cyan-300 hover:underline" aria-label={`Let's Talk about ${s.title}`}>Let&apos;s Talk →</Link>
             </div>
-          </div>
+          </RevealItem>
         ))}
-      </div>
+      </RevealGroup>
       <section className="panel rounded-md p-10 text-center space-y-4">
         <h2 className="font-display tracking-wide text-lg">Have a mission in mind?</h2>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/quote" className="btn" aria-label="Get an instant website cost estimate">Get an Estimate</Link>
-          <Link href="/contact" className="btn" aria-label="Contact — Request a project quote">Let&apos;s talk</Link>
+          <Link href="/quote" className="btn btn-primary">Get an Estimate</Link>
+          <Link href="/contact" className="btn">Let&apos;s Talk</Link>
         </div>
       </section>
     </div>

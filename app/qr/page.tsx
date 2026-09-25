@@ -385,7 +385,7 @@ END:VCARD`;
     <div className="container-max py-16 space-y-10">
       {/* Header */}
       <header className="space-y-4 text-center max-w-2xl mx-auto">
-        <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0b1419] border border-cyan-500/30 rounded-lg mb-2 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
+        <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0b1419] border border-cyan-500/30 rounded-md mb-2 shadow-[0_0_15px_rgba(34,211,238,0.1)]">
           <Terminal className="w-8 h-8 text-cyan-400" />
         </div>
         <h1 className="font-display tracking-wide text-4xl md:text-5xl text-white">
@@ -440,9 +440,9 @@ END:VCARD`;
                       value={urlInput}
                       onChange={(e) => setUrlInput(e.target.value)}
                       placeholder={t('urlPlaceholder')}
-                      className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                      className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                     />
-                    <p className="text-xs text-slate-500">
+                    <p className="text-xs text-slate-400">
                       {t('urlHelp')}
                     </p>
                   </div>
@@ -459,7 +459,7 @@ END:VCARD`;
                       onChange={(e) => setTextInput(e.target.value)}
                       placeholder={t('textPlaceholder')}
                       rows={6}
-                      className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600 resize-none"
+                      className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400 resize-none"
                     />
                   </div>
                 )}
@@ -477,7 +477,7 @@ END:VCARD`;
                           value={contactInfo.firstName}
                           onChange={(e) => setContactInfo({...contactInfo, firstName: e.target.value})}
                           placeholder={t('firstNamePlaceholder')}
-                          className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                          className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                         />
                       </div>
                       <div className="space-y-2">
@@ -489,7 +489,7 @@ END:VCARD`;
                           value={contactInfo.lastName}
                           onChange={(e) => setContactInfo({...contactInfo, lastName: e.target.value})}
                           placeholder={t('lastNamePlaceholder')}
-                          className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                          className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                         />
                       </div>
                     </div>
@@ -503,7 +503,7 @@ END:VCARD`;
                         value={contactInfo.phone}
                         onChange={(e) => setContactInfo({...contactInfo, phone: e.target.value})}
                         placeholder={t('phonePlaceholder')}
-                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                       />
                     </div>
                     
@@ -516,7 +516,7 @@ END:VCARD`;
                         value={contactInfo.email}
                         onChange={(e) => setContactInfo({...contactInfo, email: e.target.value})}
                         placeholder={t('emailPlaceholder')}
-                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                       />
                     </div>
                     
@@ -529,7 +529,7 @@ END:VCARD`;
                         value={contactInfo.organization}
                         onChange={(e) => setContactInfo({...contactInfo, organization: e.target.value})}
                         placeholder={t('organizationPlaceholder')}
-                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                       />
                     </div>
                     
@@ -542,7 +542,7 @@ END:VCARD`;
                         value={contactInfo.url}
                         onChange={(e) => setContactInfo({...contactInfo, url: e.target.value})}
                         placeholder={t('websitePlaceholder')}
-                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-600"
+                        className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400 w-full text-slate-200 placeholder:text-slate-400"
                       />
                     </div>
                   </div>
@@ -551,7 +551,7 @@ END:VCARD`;
 
               <button
                 onClick={resetForm}
-                className="text-sm text-slate-500 hover:text-red-400 transition-colors underline decoration-slate-700 hover:decoration-red-400 underline-offset-4"
+                className="text-sm text-slate-400 hover:text-red-400 transition-colors underline decoration-slate-700 hover:decoration-red-400 underline-offset-4"
               >
                 {t('clearAllFields')}
               </button>
@@ -561,7 +561,7 @@ END:VCARD`;
             <div className="flex flex-col items-center space-y-8">
               <h2 className="font-display text-xl text-white tracking-wide">{t('generatedQrCode')}</h2>
               
-              <div className="brackets p-6 w-full max-w-sm flex flex-col items-center justify-center min-h-[300px] bg-[#0b1419]/50 border border-cyan-500/10 rounded-sm">
+              <div className="brackets p-6 w-full max-w-sm flex flex-col items-center justify-center min-h-[300px] bg-[#0b1419]/50 border border-cyan-500/10 rounded-md">
                 {qrData ? (
                   <div className="text-center w-full">
                     <div
@@ -577,14 +577,14 @@ END:VCARD`;
                     >
                       {/* QR code will be dynamically inserted here */}
                     </div>
-                    <p className="text-xs text-slate-500 font-mono">
+                    <p className="text-xs text-slate-400 font-mono">
                       {t('scanQrCode')}
                     </p>
                   </div>
                 ) : (
                   <div className="text-center py-8">
                     <QrCode className="w-12 h-12 text-slate-700 mx-auto mb-4" />
-                    <p className="text-slate-500 text-sm">
+                    <p className="text-slate-400 text-sm">
                       {t('fillFormPrompt')}
                     </p>
                   </div>
@@ -600,7 +600,7 @@ END:VCARD`;
                   </h3>
                   <button
                     onClick={resetColors}
-                    className="text-xs text-slate-500 hover:text-cyan-300 transition-colors flex items-center gap-1"
+                    className="text-xs text-slate-400 hover:text-cyan-300 transition-colors flex items-center gap-1"
                   >
                     <RotateCcw className="w-3 h-3" />
                     {t('resetColors')}
@@ -698,7 +698,7 @@ END:VCARD`;
         </div>
       </div>
 
-      <div className="text-center pt-8 border-t border-cyan-500/10 text-slate-500 text-sm">
+      <div className="text-center pt-8 border-t border-cyan-500/10 text-slate-400 text-sm">
         <p>{t('footerText')}</p>
       </div>
     </div>
