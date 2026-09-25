@@ -11,8 +11,8 @@ const WP_HOURS_PER_PAGE = 3;
 const CUSTOM_BASE_HOURS = 5;
 const CUSTOM_HOURS_PER_PAGE = 3;
 const FEATURE_HOURS: Record<Feature, number> = {
-  form: 2,
-  blog: 5,
+  form: 1,
+  blog: 3,
   store: 15,
   members: 8,
   languages: 6,
