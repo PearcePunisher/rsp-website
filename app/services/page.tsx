@@ -138,7 +138,8 @@ export default function ServicesPage(){
       <section className="panel rounded-md p-10 text-center space-y-4">
         <h2 className="font-display tracking-wide text-lg">Have a mission in mind?</h2>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/contact" className="btn" aria-label="Contact — Request a project quote">Let&apos;s talk</Link> 
+          <Link href="/quote" className="btn" aria-label="Get an instant website cost estimate">Get an Estimate</Link>
+          <Link href="/contact" className="btn" aria-label="Contact — Request a project quote">Let&apos;s talk</Link>
         </div>
       </section>
     </div>
