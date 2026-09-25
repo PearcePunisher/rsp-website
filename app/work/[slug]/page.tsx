@@ -197,9 +197,14 @@ export default async function PostPage({
       )}
       <section className="panel rounded-md p-8 text-center space-y-3 mt-12">
         <h2 className="font-display tracking-wide text-lg">Want a website like this one?</h2>
-        <Link href="/contact" className="btn" aria-label="Contact — Start a project">
-          Let&apos;s chat
-        </Link>
+        <div className="flex items-center justify-center gap-3 flex-wrap">
+          <Link href="/quote" className="btn" aria-label="Get an instant website cost estimate">
+            Get an Estimate
+          </Link>
+          <Link href="/contact" className="btn" aria-label="Contact — Start a project">
+            Let&apos;s chat
+          </Link>
+        </div>
       </section>
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
         <Link href="/work" className="text-cyan-300">

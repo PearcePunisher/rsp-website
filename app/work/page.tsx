@@ -1,8 +1,19 @@
+import fs from "node:fs";
+import path from "node:path";
 import Link from "next/link";
 import { type SanityDocument } from "next-sanity";
 import Image from "next/image";
 
 import { client } from "@/src/sanity/client";
+
+function localAssetExists(publicPath: string) {
+  if (!publicPath.startsWith("/")) return true; // remote (Sanity) URLs
+  try {
+    return fs.existsSync(path.join(process.cwd(), "public", publicPath));
+  } catch {
+    return false;
+  }
+}
 
 const WORK_QUERY = `*[
   _type == "work" && defined(slug.current)
@@ -18,8 +29,21 @@ const WORK_QUERY = `*[
 
 const options = { next: { revalidate: 30 } };
 
+const STATIC_WORK = [
+  {
+    _id: "static-credo-tri-indy-car",
+    title: "Credo Tri IndyCar",
+    slug: { current: "credo-tri-indy-car" },
+    coverUrl: "/work/credo/cover.webp",
+    summary:
+      "A white-label mobile app platform for racing teams — currently powering Juncos Hollinger Racing's fan & VIP experience.",
+    category: "Mobile App",
+  },
+];
+
 export default async function IndexPage() {
-  const work = await client.fetch<SanityDocument[]>(WORK_QUERY, {}, options);
+  const sanityWork = await client.fetch<SanityDocument[]>(WORK_QUERY, {}, options);
+  const work = [...STATIC_WORK, ...sanityWork];
 
   return (
     // <main className="container mx-auto min-h-screen max-w-3xl p-8">
@@ -52,14 +76,22 @@ export default async function IndexPage() {
             <div
               className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"
               aria-hidden>
-              <Image
-                src={work.coverUrl}
-                alt={work.title}
-                fill
-                className="object-cover rounded-sm"
-                sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                priority={false}
-              />
+              {localAssetExists(work.coverUrl) ? (
+                <Image
+                  src={work.coverUrl}
+                  alt={work.title}
+                  fill
+                  className="object-cover rounded-sm"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  priority={false}
+                />
+              ) : (
+                <div className="absolute inset-0 flex items-center justify-center border border-dashed border-cyan-500/20 m-2 rounded-sm">
+                  <span className="text-[10px] tracking-widest text-slate-600">
+                    IMAGE PENDING
+                  </span>
+                </div>
+              )}
             </div>
             <h2 className="text-base font-semibold tracking-wide group-hover:text-cyan-300 transition-colors">
               {work.title}

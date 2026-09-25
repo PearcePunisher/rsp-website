@@ -68,10 +68,16 @@ export default async function Home() {
               Portfolio — Case Studies
             </Link>
             <Link
+              href="/quote"
+              className="btn"
+              aria-label="Get an instant website cost estimate">
+              Get an Estimate
+            </Link>
+            <Link
               href="/contact"
               className="btn"
-              aria-label="Hire a web developer, request a quote">
-              Hire a Web Developer — Get a Quote
+              aria-label="Hire a web developer, start a conversation">
+              Hire a Web Developer — Let&apos;s Talk
             </Link>
           </div>
         </div>

@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import { ESTIMATE_HANDOFF_PARAM, readEstimateHandoff } from "@/lib/quote/handoff";
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
@@ -10,6 +11,8 @@ export default function ContactForm() {
   const router = useRouter();
   const [attribution, setAttribution] = useState<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_path?: string; raw_query?: string }>({});
   const captured = useRef(false);
+  const messageRef = useRef<HTMLTextAreaElement>(null);
+  const budgetRef = useRef<HTMLSelectElement>(null);
   useEffect(() => {
     if (captured.current) return; // only run once on mount
     captured.current = true;
@@ -24,6 +27,13 @@ export default function ContactForm() {
       const landing_path = url.pathname;
       const referrer = document.referrer || undefined;
       setAttribution({ utm_source, utm_medium, utm_campaign, raw_query, landing_path, referrer });
+      if (params.get('from') === ESTIMATE_HANDOFF_PARAM) {
+        const estimate = readEstimateHandoff();
+        if (estimate && messageRef.current && !messageRef.current.value) {
+          messageRef.current.value = estimate.message;
+          if (budgetRef.current) budgetRef.current.value = estimate.budget;
+        }
+      }
     } catch {}
   }, []);
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -131,6 +141,7 @@ export default function ContactForm() {
         <select
           id="budget"
           name="budget"
+          ref={budgetRef}
           className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400">
           <option value="<2k">Under 2k</option>
           <option value="<2-5k">2-5k</option>
@@ -149,6 +160,7 @@ export default function ContactForm() {
         <textarea
           id="message"
           name="message"
+          ref={messageRef}
           required
           rows={6}
           className="bg-[#0b1419] border border-cyan-500/30 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-400"
