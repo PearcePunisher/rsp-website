@@ -231,7 +231,9 @@ export default function QuoteBuilder() {
         </fieldset>
 
         <div className="flex flex-col gap-2 max-w-xs">
-          <label htmlFor="pageCount" className="text-xs tracking-wider text-cyan-300">
+          <label
+            htmlFor="pageCount"
+            className="text-xs tracking-wider text-cyan-300">
             3. HOW MANY PAGES?
           </label>
           <input
@@ -248,10 +250,14 @@ export default function QuoteBuilder() {
         </div>
 
         <fieldset>
-          <legend className="text-xs tracking-wider text-cyan-300 mb-4">4. FEATURES</legend>
+          <legend className="text-xs tracking-wider text-cyan-300 mb-4">
+            4. FEATURES
+          </legend>
           <div className="grid gap-3 sm:grid-cols-2">
             {FEATURE_OPTIONS.map((opt) => (
-              <label key={opt.value} className="flex items-center gap-3 text-sm cursor-pointer">
+              <label
+                key={opt.value}
+                className="flex items-center gap-3 text-sm cursor-pointer">
                 <input
                   type="checkbox"
                   checked={features.includes(opt.value)}
@@ -265,7 +271,9 @@ export default function QuoteBuilder() {
         </fieldset>
 
         <fieldset className="space-y-4">
-          <legend className="text-xs tracking-wider text-cyan-300 mb-4">5. ONGOING SUPPORT</legend>
+          <legend className="text-xs tracking-wider text-cyan-300 mb-4">
+            5. ONGOING SUPPORT
+          </legend>
           <div className="grid gap-3 sm:grid-cols-2">
             <label className="flex items-center gap-3 text-sm cursor-pointer">
               <input
@@ -293,7 +301,9 @@ export default function QuoteBuilder() {
             <select
               id="maintenance"
               value={maintenanceHours}
-              onChange={(e) => setMaintenanceHours(Number(e.target.value) as MaintenanceHours)}
+              onChange={(e) =>
+                setMaintenanceHours(Number(e.target.value) as MaintenanceHours)
+              }
               className={inputClass}>
               {MAINTENANCE_HOURS.map((h) => (
                 <option key={h} value={h}>
@@ -305,8 +315,14 @@ export default function QuoteBuilder() {
         </fieldset>
       </div>
 
-      <aside className="lg:sticky lg:top-24 space-y-6 min-w-0" aria-live="polite">
-        <div className={cn("panel brackets rounded-md p-6 space-y-6 transition-opacity", loading && quote && "opacity-60")}>
+      <aside
+        className="lg:sticky lg:top-24 space-y-6 min-w-0"
+        aria-live="polite">
+        <div
+          className={cn(
+            "panel brackets rounded-md p-6 space-y-6 transition-opacity",
+            loading && quote && "opacity-60",
+          )}>
           <h2 className="text-xl">Your estimate</h2>
 
           {!platform ? (
@@ -323,8 +339,12 @@ export default function QuoteBuilder() {
                 <div className="flex justify-between gap-4">
                   {needsDesign ? (
                     <>
-                      <dt className="text-slate-300">Design concepts (3 rounds included)</dt>
-                      <dd className="tabular-nums">{usd.format(quote.designFee)}</dd>
+                      <dt className="text-slate-300">
+                        Design concepts (3 rounds included)
+                      </dt>
+                      <dd className="tabular-nums">
+                        {usd.format(quote.designFee)}
+                      </dd>
                     </>
                   ) : (
                     <>
@@ -335,7 +355,9 @@ export default function QuoteBuilder() {
                 </div>
                 <div className="flex justify-between gap-4">
                   <dt className="text-slate-300">Estimated build</dt>
-                  <dd className="tabular-nums">{usd.format(quote.buildCost)}</dd>
+                  <dd className="tabular-nums">
+                    {usd.format(quote.buildCost)}
+                  </dd>
                 </div>
                 <div className="flex justify-between gap-4 items-baseline pt-3 border-t border-cyan-500/20">
                   <dt className="font-semibold">Estimated project total</dt>
@@ -345,8 +367,9 @@ export default function QuoteBuilder() {
                 </div>
               </dl>
               <p className="text-xs text-slate-400">
-                All projects start at {usd.format(quote.projectMinimum)}. This is a starting
-                estimate, your final quote is confirmed after a free onboarding call.
+                All projects start at {usd.format(quote.projectMinimum)}. This
+                is a starting estimate, your final quote is confirmed after a
+                free onboarding call. {usd.format(quote.projectMinimum)} required up-front, with the remaining balance split and billed at each project milestone.
               </p>
 
               <div className="space-y-3 pt-4 border-t border-cyan-500/20">
@@ -357,12 +380,16 @@ export default function QuoteBuilder() {
                   {quote.monthly.map((line) => (
                     <div key={line.key} className="flex justify-between gap-4">
                       <dt className="text-slate-300">{line.label}</dt>
-                      <dd className="tabular-nums">{usd.format(line.amount)}/mo</dd>
+                      <dd className="tabular-nums">
+                        {usd.format(line.amount)}/mo
+                      </dd>
                     </div>
                   ))}
                   <div className="flex justify-between gap-4 pt-2 border-t border-cyan-500/10 font-semibold">
                     <dt>Monthly total</dt>
-                    <dd className="tabular-nums">{usd.format(quote.monthlyTotal)}/mo</dd>
+                    <dd className="tabular-nums">
+                      {usd.format(quote.monthlyTotal)}/mo
+                    </dd>
                   </div>
                 </dl>
               </div>
@@ -372,7 +399,11 @@ export default function QuoteBuilder() {
 
         <div className="space-y-2">
           <Link
-            href={canHandoff ? `/contact?from=${ESTIMATE_HANDOFF_PARAM}` : "/contact"}
+            href={
+              canHandoff
+                ? `/contact?from=${ESTIMATE_HANDOFF_PARAM}`
+                : "/contact"
+            }
             onClick={handleCtaClick}
             className="btn w-full justify-center">
             Book your free onboarding call
