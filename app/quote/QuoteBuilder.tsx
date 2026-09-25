@@ -133,7 +133,7 @@ function buildMessage(input: QuoteInput, quote: QuoteResult): string {
 export default function QuoteBuilder() {
   const [platform, setPlatform] = useState<Platform | null>(null);
   const [needsDesign, setNeedsDesign] = useState(true);
-  const [pageInput, setPageInput] = useState("5");
+  const [pageInput, setPageInput] = useState("3");
   const [features, setFeatures] = useState<Feature[]>([]);
   const [analytics, setAnalytics] = useState(false);
   const [seo, setSeo] = useState(false);
@@ -192,8 +192,9 @@ export default function QuoteBuilder() {
   }
 
   return (
-    <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start">
-      <div className="space-y-10 min-w-0">
+    <>
+      <div className="grid gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,24rem)] lg:items-start">
+        <div className="space-y-10 min-w-0">
         <fieldset>
           <legend className="text-xs tracking-wider text-cyan-300 mb-4">
             1. WHAT KIND OF WEBSITE?
@@ -234,7 +235,10 @@ export default function QuoteBuilder() {
           <label
             htmlFor="pageCount"
             className="text-xs tracking-wider text-cyan-300">
-            3. HOW MANY PAGES?
+            <span className="block">3. HOW MANY PAGES?</span>
+            <span className="mt-1 block text-[11px] tracking-normal text-slate-400">
+              Recommended minimum: Home, About, Contact
+            </span>
           </label>
           <input
             id="pageCount"
@@ -315,14 +319,14 @@ export default function QuoteBuilder() {
         </fieldset>
       </div>
 
-      <aside
-        className="lg:sticky lg:top-24 space-y-6 min-w-0"
-        aria-live="polite">
-        <div
-          className={cn(
-            "panel brackets rounded-md p-6 space-y-6 transition-opacity",
-            loading && quote && "opacity-60",
-          )}>
+        <aside
+          className="lg:sticky lg:top-24 space-y-6 min-w-0"
+          aria-live="polite">
+          <div
+            className={cn(
+              "panel brackets rounded-md p-6 space-y-6 transition-opacity",
+              loading && quote && "opacity-60",
+            )}>
           <h2 className="text-xl">Your estimate</h2>
 
           {!platform ? (
@@ -397,24 +401,29 @@ export default function QuoteBuilder() {
           )}
         </div>
 
-        <div className="space-y-2">
-          <Link
-            href={
-              canHandoff
-                ? `/contact?from=${ESTIMATE_HANDOFF_PARAM}`
-                : "/contact"
-            }
-            onClick={handleCtaClick}
-            className="btn w-full justify-center">
-            Book your free onboarding call
-          </Link>
-          {canHandoff && (
-            <p className="text-xs text-slate-500 text-center">
-              Your estimate will be added to the contact form.
-            </p>
-          )}
-        </div>
-      </aside>
-    </div>
+          <div className="space-y-2">
+            <Link
+              href={
+                canHandoff
+                  ? `/contact?from=${ESTIMATE_HANDOFF_PARAM}`
+                  : "/contact"
+              }
+              onClick={handleCtaClick}
+              className="btn w-full justify-center">
+              Book your free onboarding call
+            </Link>
+            {canHandoff && (
+              <p className="text-xs text-slate-500 text-center">
+                Your estimate will be added to the contact form.
+              </p>
+            )}
+          </div>
+        </aside>
+      </div>
+
+      <p className="mt-6 text-xs text-slate-500">
+        All pricing based off of averages and is not representative of final cost. This is not an official quote.
+      </p>
+    </>
   );
 }
