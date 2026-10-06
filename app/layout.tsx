@@ -68,8 +68,14 @@ export default function RootLayout({
         className={`${orbitron.variable} ${inter.variable} font-sans antialiased min-h-[100dvh] flex flex-col`}>
         <Script
           defer
-          src="https://cloud.umami.is/script.js"
-          data-website-id="bb917952-d701-41dc-85cf-6fafd3067193"
+          src="https://analytics.roguesalad.co/script.js"
+          data-website-id="eaf8557b-1354-45b8-8c0b-ac10472ad32b"
+          data-performance="true"
+        />
+        <Script
+          defer
+          src="https://analytics.roguesalad.co/recorder.js"
+          data-website-id="eaf8557b-1354-45b8-8c0b-ac10472ad32b"
         />
         <GoogleAnalytics gaId="G-R6S3LW3CJB" />
         <MotionProvider>
