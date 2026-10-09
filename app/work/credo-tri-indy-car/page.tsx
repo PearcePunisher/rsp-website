@@ -2,6 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import Image from "next/image";
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
@@ -291,13 +292,13 @@ export default function CredoWorkPage() {
           If you&apos;ve got something specific in mind, let&apos;s talk
           about it.
         </p>
-        <Link href="/contact" className="btn">
+        <Link href="/contact" className="btn" {...ev("cta_click", { label: "lets_talk", location: "case_study", destination: "contact", project: "credo-tri-indy-car" })}>
           Let&apos;s Talk
         </Link>
       </section>
 
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
-        <Link href="/work" className="text-cyan-300">
+        <Link href="/work" className="text-cyan-300" {...ev("section_link_click", { label: "all_work", location: "case_study" })}>
           ← All Work
         </Link>
       </nav>

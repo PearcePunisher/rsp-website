@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
+import { track } from '@/lib/analytics';
 import { QrCode, Link, MessageSquare, User, Download, Copy, Check, Terminal, Palette, RotateCcw } from 'lucide-react';
 import type QRCodeStyling from 'qr-code-styling';
 import type { FileExtension, Options } from 'qr-code-styling';
@@ -149,6 +150,8 @@ const QRCodeGenerator = () => {
   const [copied, setCopied] = useState(false);
   const qrContainerRef = useRef<HTMLDivElement>(null);
   const qrInstanceRef = useRef<QRCodeStyling | null>(null);
+  const generatedTabs = useRef(new Set<string>());
+  const colorsTracked = useRef(false);
 
   // Color customization
   const [dotsColor, setDotsColor] = useState<string>(DEFAULT_COLORS.dots);
@@ -278,6 +281,13 @@ END:VCARD`;
     setQrData(data);
   }, [activeTab, urlInput, textInput, contactInfo]);
 
+  // First QR produced per tab per visit. Never sends the encoded data itself.
+  useEffect(() => {
+    if (!qrData.trim() || generatedTabs.current.has(activeTab)) return;
+    generatedTabs.current.add(activeTab);
+    track('qr_generated', { type: activeTab });
+  }, [qrData, activeTab]);
+
   // Render / update the QR code whenever the data or colors change.
   useEffect(() => {
     if (!qrData.trim()) {
@@ -313,6 +323,7 @@ END:VCARD`;
   const downloadQRCode = async () => {
     if (!qrData) return;
     const name = `qr-code-${activeTab}`;
+    track('qr_download', { type: activeTab, format: exportFormat, transparent: transparentBg });
 
     if (exportFormat === 'svg') {
       const blob = new Blob([buildCleanSvg(qrData)], { type: 'image/svg+xml' });
@@ -339,7 +350,14 @@ END:VCARD`;
     }
   };
 
+  const noteColorChange = () => {
+    if (colorsTracked.current) return;
+    colorsTracked.current = true;
+    track('qr_colors_customized');
+  };
+
   const resetColors = () => {
+    track('qr_colors_reset');
     setDotsColor(DEFAULT_COLORS.dots);
     setBackgroundColor(DEFAULT_COLORS.background);
     setCornersColor(DEFAULT_COLORS.corners);
@@ -350,6 +368,7 @@ END:VCARD`;
     if (qrData) {
       try {
         await navigator.clipboard.writeText(qrData);
+        track('qr_copy_data', { type: activeTab });
         setCopied(true);
         setTimeout(() => setCopied(false), 2000);
       } catch (err) {
@@ -359,6 +378,7 @@ END:VCARD`;
   };
 
   const resetForm = () => {
+    track('qr_clear_fields', { type: activeTab });
     setUrlInput('');
     setTextInput('');
     setContactInfo({
@@ -403,7 +423,10 @@ END:VCARD`;
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => {
+                    if (tab.id !== activeTab) track('qr_tab_change', { from: activeTab, to: tab.id });
+                    setActiveTab(tab.id);
+                  }}
                   className={`flex-1 flex items-center justify-center gap-2 px-6 py-4 text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                     activeTab === tab.id
                       ? 'text-cyan-300 border-b-2 border-cyan-500 bg-cyan-500/5'
@@ -625,7 +648,10 @@ END:VCARD`;
                         type="color"
                         value={swatch.value}
                         disabled={swatch.disabled}
-                        onChange={(e) => swatch.onChange(e.target.value)}
+                        onChange={(e) => {
+                          noteColorChange();
+                          swatch.onChange(e.target.value);
+                        }}
                         className="w-9 h-9 rounded-md border border-cyan-500/30 bg-transparent cursor-pointer p-0 disabled:cursor-not-allowed"
                       />
                     </label>
@@ -635,7 +661,10 @@ END:VCARD`;
                   <input
                     type="checkbox"
                     checked={transparentBg}
-                    onChange={(e) => setTransparentBg(e.target.checked)}
+                    onChange={(e) => {
+                      noteColorChange();
+                      setTransparentBg(e.target.checked);
+                    }}
                     className="accent-cyan-500 w-4 h-4"
                   />
                   {t('transparentBackground')}

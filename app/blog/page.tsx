@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ev } from '@/lib/analytics';
 import Image from 'next/image';
 import { RevealGroup, RevealItem } from '@/app/components/Reveal';
 import { client } from '@/src/sanity/client';
@@ -42,7 +43,7 @@ export default async function BlogIndex() {
           const date = p._createdAt;
           return (
           <RevealItem key={p.slug}>
-          <Link href={`/blog/${p.slug}`} className="panel brackets lift rounded-md p-4 group block h-full">
+          <Link href={`/blog/${p.slug}`} {...ev("blog_card_click", { slug: p.slug })} className="panel brackets lift rounded-md p-4 group block h-full">
             <div className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden" aria-hidden>
               {p.imageUrl && (
                 <Image src={p.imageUrl} alt={p.title} fill className="object-cover rounded-sm" sizes="(max-width: 640px) 100vw, 50vw" />

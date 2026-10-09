@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 
 export default function Footer(){
   return (
@@ -12,11 +13,11 @@ export default function Footer(){
           <span>STATUS: LINK ESTABLISHED</span>
         </div>
         <div className="flex gap-6">
-          <Link href="mailto:riley@roguesalad.co" className="hover:text-cyan-300">Email</Link>
+          <Link href="mailto:riley@roguesalad.co" className="hover:text-cyan-300" {...ev("mailto_click", { location: "footer" })}>Email</Link>
           {/* <Link href="https://instagram.com" className="hover:text-cyan-300">Instagram</Link> */}
-          <Link href="/privacy" className="hover:text-cyan-300">Privacy</Link>
-          <Link href="https://billing.stripe.com/p/login/4gMaEZdxb67egaN13A87K00" target="_blank" className="hover:text-cyan-300">Billing</Link>
-          <Link href="/qr" className="hover:text-cyan-300">Free QR Code Generator</Link>
+          <Link href="/privacy" className="hover:text-cyan-300" {...ev("footer_click", { label: "privacy" })}>Privacy</Link>
+          <Link href="https://billing.stripe.com/p/login/4gMaEZdxb67egaN13A87K00" target="_blank" className="hover:text-cyan-300" {...ev("outbound_click", { label: "billing", location: "footer", destination: "stripe" })}>Billing</Link>
+          <Link href="/qr" className="hover:text-cyan-300" {...ev("footer_click", { label: "qr_generator" })}>Free QR Code Generator</Link>
         </div>
         <p className="md:text-right">© {new Date().getFullYear()} Rogue Salad Productions - Kept you waiting, huh?</p>
       </div>

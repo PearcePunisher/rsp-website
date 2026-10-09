@@ -4,6 +4,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { m, AnimatePresence } from "framer-motion";
 import ScrambleText from "@/app/components/ScrambleText";
+import { ev, track } from "@/lib/analytics";
 import { Menu, X } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 
@@ -43,7 +44,7 @@ export default function NavBar() {
     <>
     <header className="sticky top-0 z-40 backdrop-blur-md bg-[#060b0f]/80 border-b border-cyan-500/20 shadow-[0_2px_8px_-4px_rgba(0,0,0,0.6)]">
       <nav className="container-max h-14 flex items-center justify-between">
-        <Link href="/" className="flex items-center h-full" aria-label="Rogue Salad Productions Home">
+        <Link href="/" className="flex items-center h-full" aria-label="Rogue Salad Productions Home" {...ev("nav_click", { label: "logo", location: "header" })}>
           <span className="inline-flex items-center py-1 px-3 rounded-sm bg-[#22D3EE] shadow-[0_0_0_1px_rgba(255,255,255,0.08),0_0_8px_-2px_rgba(34,211,238,0.6)]">
             <Image
               src="/rsp-logo.png"
@@ -62,6 +63,7 @@ export default function NavBar() {
               <li key={l.href}>
                 <Link
                   href={l.href}
+                  {...ev("nav_click", { label: l.label.toLowerCase(), location: "header" })}
                   className={`relative px-1 py-1 hover:text-cyan-300 transition-colors ${active ? "text-cyan-300" : "text-slate-300"}`}
                   aria-current={active ? "page" : undefined}
                 >
@@ -81,7 +83,7 @@ export default function NavBar() {
           aria-label={open ? "Close navigation" : "Open navigation"}
           aria-expanded={open}
           aria-controls="mobile-nav-panel"
-          onClick={()=> setOpen(o=>!o)}
+          onClick={()=> { track("mobile_menu_toggle", { state: open ? "close" : "open" }); setOpen(o=>!o); }}
         >
           {open ? <X size={20} /> : <Menu size={20} />}
         </button>
@@ -112,7 +114,7 @@ export default function NavBar() {
           >
             <button
               type="button"
-              onClick={()=> setOpen(false)}
+              onClick={()=> { track("mobile_menu_toggle", { state: "close" }); setOpen(false); }}
               aria-label="Close navigation"
               className="absolute top-4 right-4 h-10 w-10 inline-flex items-center justify-center rounded-full border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/10 focus:outline-none focus:ring-2 focus:ring-cyan-400"
             >
@@ -126,6 +128,7 @@ export default function NavBar() {
                     <Link
                       ref={i===0?firstLinkRef:undefined}
                       href={l.href}
+                      {...ev("nav_click", { label: l.label.toLowerCase(), location: "mobile_menu" })}
                       className={`relative px-2 py-1 inline-block transition-colors ${active?'text-cyan-300':'text-slate-200 hover:text-cyan-300'}`}
                       aria-current={active? 'page': undefined}
                     >

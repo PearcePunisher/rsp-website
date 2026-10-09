@@ -1,6 +1,7 @@
 import fs from "node:fs";
 import path from "node:path";
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import { type SanityDocument } from "next-sanity";
 import Image from "next/image";
 import { RevealGroup, RevealItem } from "@/app/components/Reveal";
@@ -80,6 +81,7 @@ export default async function IndexPage() {
           <RevealItem key={work.slug.current}>
           <Link
             href={`/work/${work.slug.current}`}
+            {...ev("project_card_click", { slug: work.slug.current, location: "work_index" })}
             className="panel brackets lift rounded-md p-4 group block h-full">
             <div
               className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"

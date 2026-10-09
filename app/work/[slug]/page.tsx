@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { client } from "@/src/sanity/client";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import Image from "next/image";
 
 const POST_QUERY = `*[_type == "work" && slug.current == $slug][0]{
@@ -157,6 +158,7 @@ export default async function PostPage({
         <div className="pt-2">
           <a
             href={outboundHref}
+            {...ev("outbound_click", { label: "visit_client_site", project: project.slug })}
             target="_blank"
             rel="noopener"
             referrerPolicy="strict-origin-when-cross-origin"
@@ -176,6 +178,7 @@ export default async function PostPage({
               <a
                 key={pl.name}
                 href={pl.url}
+                {...ev("outbound_click", { label: "plugin", name: pl.name, project: project.slug })}
                 target="_blank"
                 rel="noopener nofollow sponsored"
                 className="group inline-flex items-center gap-2 rounded-md border border-cyan-400/40 bg-[#0b1419]/70 px-4 py-2 text-xs font-medium tracking-wide text-cyan-200 transition
@@ -225,7 +228,7 @@ export default async function PostPage({
                       creditHref = u.toString();
                     } catch {}
                     return (
-                      <a href={creditHref} target="_blank" rel="noopener" className="underline hover:text-cyan-100">{c.name} ↗</a>
+                      <a href={creditHref} {...ev("outbound_click", { label: "credit", name: c.name, role: c.role, project: project.slug })} target="_blank" rel="noopener" className="underline hover:text-cyan-100">{c.name} ↗</a>
                     );
                   })()
                 ) : (
@@ -239,16 +242,16 @@ export default async function PostPage({
       <section className="panel rounded-md p-8 text-center space-y-3 mt-12">
         <h2 className="font-display tracking-wide text-lg">Want a website like this one?</h2>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/quote" className="btn btn-primary">
+          <Link href="/quote" className="btn btn-primary" {...ev("cta_click", { label: "get_estimate", location: "case_study", destination: "quote", project: project.slug })}>
             Get an Estimate
           </Link>
-          <Link href="/contact" className="btn">
+          <Link href="/contact" className="btn" {...ev("cta_click", { label: "lets_talk", location: "case_study", destination: "contact", project: project.slug })}>
             Let&apos;s Talk
           </Link>
         </div>
       </section>
       <nav className="flex justify-between text-xs tracking-wide pt-8 border-t border-cyan-500/20">
-        <Link href="/work" className="text-cyan-300">
+        <Link href="/work" className="text-cyan-300" {...ev("section_link_click", { label: "all_work", location: "case_study" })}>
           ← All Work
         </Link>
       </nav>

@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { PortableText } from 'next-sanity';
 import Image from 'next/image';
 import Link from 'next/link';
+import { ev } from '@/lib/analytics';
 import { client } from '@/src/sanity/client';
 import { notFound } from 'next/navigation';
 
@@ -167,7 +168,7 @@ export default async function PageView({ params }: { params: Promise<{ slug: str
                       </div>
                     )}
                     {s.buttonLabel && s.buttonUrl && (
-                      <Link href={s.buttonUrl} className="btn" aria-label={s.buttonLabel} target='_blank'>{s.buttonLabel}</Link>
+                      <Link href={s.buttonUrl} {...ev("blog_cta_click", { label: s.buttonLabel, url: s.buttonUrl })} className="btn" aria-label={s.buttonLabel} target='_blank'>{s.buttonLabel}</Link>
                     )}
                   </section>
                 );
@@ -197,7 +198,7 @@ export default async function PageView({ params }: { params: Promise<{ slug: str
         </div>
       )}
       <div className="pt-8 border-t border-cyan-500/20">
-        <Link href="/blog" className="text-xs text-cyan-300 hover:underline">← All Pages</Link>
+        <Link href="/blog" className="text-xs text-cyan-300 hover:underline" {...ev("section_link_click", { label: "all_posts", location: "blog_post" })}>← All Pages</Link>
       </div>
     </article>
   );

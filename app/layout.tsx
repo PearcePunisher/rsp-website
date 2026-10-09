@@ -3,11 +3,10 @@ import { Orbitron, Inter } from "next/font/google";
 import "./globals.css";
 import NavBar from "./components/NavBar";
 import Footer from "./components/Footer";
-import { Analytics } from "@vercel/analytics/next";
 import { GoogleAnalytics, GoogleTagManager } from "@next/third-parties/google";
-import { SpeedInsights } from "@vercel/speed-insights/next";
 import Script from "next/script";
 import { MotionProvider } from "./components/MotionProvider";
+import ScrollDepth from "./components/ScrollDepth";
 
 const orbitron = Orbitron({
   variable: "--font-display",
@@ -83,8 +82,7 @@ export default function RootLayout({
           <main className="flex-1">{children}</main>
           <Footer />
         </MotionProvider>
-        <Analytics />
-        <SpeedInsights />
+        <ScrollDepth />
       </body>
       <GoogleTagManager gtmId="GTM-MVPPRQ7M" />
     </html>

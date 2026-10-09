@@ -2,6 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { ESTIMATE_HANDOFF_PARAM, readEstimateHandoff } from "@/lib/quote/handoff";
+import { track } from "@/lib/analytics";
 
 export default function ContactForm() {
   const [sent, setSent] = useState(false);
@@ -11,6 +12,8 @@ export default function ContactForm() {
   const router = useRouter();
   const [attribution, setAttribution] = useState<{ utm_source?: string; utm_medium?: string; utm_campaign?: string; referrer?: string; landing_path?: string; raw_query?: string }>({});
   const captured = useRef(false);
+  const started = useRef(false);
+  const fromEstimate = useRef(false);
   const messageRef = useRef<HTMLTextAreaElement>(null);
   const budgetRef = useRef<HTMLSelectElement>(null);
   useEffect(() => {
@@ -29,6 +32,8 @@ export default function ContactForm() {
       setAttribution({ utm_source, utm_medium, utm_campaign, raw_query, landing_path, referrer });
       if (params.get('from') === ESTIMATE_HANDOFF_PARAM) {
         const estimate = readEstimateHandoff();
+        fromEstimate.current = !!estimate;
+        if (estimate) track('contact_form_prefilled', { budget: estimate.budget });
         if (estimate && messageRef.current && !messageRef.current.value) {
           messageRef.current.value = estimate.message;
           if (budgetRef.current) budgetRef.current.value = estimate.budget;
@@ -48,6 +53,13 @@ export default function ContactForm() {
     setLoading(true);
     const form = e.currentTarget;
     const formData = new FormData(form);
+    const eventProps = {
+      budget: String(formData.get("budget") ?? ""),
+      has_phone: !!formData.get("phone"),
+      has_company: !!formData.get("company"),
+      from_estimate: fromEstimate.current,
+    };
+    track("contact_form_submit", eventProps);
   type Payload = Record<string, FormDataEntryValue | string | undefined>;
   const payload: Payload = { ...Object.fromEntries(formData.entries()), ...attribution };
     try {
@@ -58,12 +70,15 @@ export default function ContactForm() {
       });
       const json = await res.json();
       if (!res.ok || !json.ok) throw new Error(json.error || "Failed");
+      track("contact_form_success", eventProps);
       setSent(true);
       form.reset();
   const fname = firstName(payload.name as string | undefined) || 'there';
   router.push(`/contact/thank-you?name=${encodeURIComponent(fname)}`);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Error");
+      const reason = err instanceof Error ? err.message : "Error";
+      track("contact_form_error", { ...eventProps, reason });
+      setError(reason);
     } finally {
       setLoading(false);
     }
@@ -74,6 +89,11 @@ export default function ContactForm() {
     <form
       className="space-y-6"
       onSubmit={handleSubmit}
+      onFocus={() => {
+        if (started.current) return;
+        started.current = true;
+        track("contact_form_started", { from_estimate: fromEstimate.current });
+      }}
       aria-describedby="privacy-note"
       noValidate>
       <div className="grid gap-6 md:grid-cols-2">

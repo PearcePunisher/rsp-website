@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import {
   MAX_PAGES,
   MAINTENANCE_HOURS,
@@ -11,6 +11,7 @@ import {
   type QuoteResult,
 } from "@/lib/quote/types";
 import { cn } from "@/lib/cn";
+import { track } from "@/lib/analytics";
 import {
   ESTIMATE_HANDOFF_PARAM,
   budgetBucket,
@@ -143,6 +144,10 @@ export default function QuoteBuilder() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | undefined>();
 
+  const startedRef = useRef(false);
+  const shownRef = useRef(false);
+  const lastPages = useRef(clampPages("3"));
+
   const pageCount = clampPages(pageInput);
   const input: QuoteInput | null = platform
     ? { platform, needsDesign, pageCount, features, analytics, seo, maintenanceHours }
@@ -162,8 +167,18 @@ export default function QuoteBuilder() {
           signal: controller.signal,
         });
         if (!res.ok) throw new Error("Could not calculate an estimate");
-        setQuote(await res.json());
+        const result: QuoteResult = await res.json();
+        setQuote(result);
         setError(undefined);
+        if (!shownRef.current) {
+          shownRef.current = true;
+          track("quote_estimate_shown", {
+            platform,
+            total: result.projectTotal,
+            monthly: result.monthlyTotal,
+            budget_bucket: budgetBucket(result.projectTotal),
+          });
+        }
       } catch (err) {
         if (controller.signal.aborted) return;
         setError(err instanceof Error ? err.message : "Error");
@@ -177,13 +192,24 @@ export default function QuoteBuilder() {
     };
   }, [platform, needsDesign, pageCount, features, analytics, seo, maintenanceHours]);
 
+  function choose(step: string, value: string | number | boolean) {
+    track("quote_option_selected", { step, value });
+  }
+
   function toggleFeature(f: Feature) {
+    choose(`feature_${f}`, !features.includes(f));
     setFeatures((prev) => (prev.includes(f) ? prev.filter((x) => x !== f) : [...prev, f]));
   }
 
   const canHandoff = input && quote && !loading && !error;
 
   function handleCtaClick() {
+    track("quote_cta_click", {
+      handoff: !!canHandoff,
+      total: quote?.projectTotal,
+      monthly: quote?.monthlyTotal,
+      platform: platform ?? undefined,
+    });
     if (!canHandoff) return;
     saveEstimateHandoff({
       message: buildMessage(input, quote),
@@ -207,7 +233,14 @@ export default function QuoteBuilder() {
                 title={opt.title}
                 copy={opt.copy}
                 selected={platform === opt.value}
-                onSelect={() => setPlatform(opt.value)}
+                onSelect={() => {
+                  if (!startedRef.current) {
+                    startedRef.current = true;
+                    track("quote_started", { platform: opt.value });
+                  }
+                  choose("platform", opt.value);
+                  setPlatform(opt.value);
+                }}
               />
             ))}
           </div>
@@ -225,7 +258,10 @@ export default function QuoteBuilder() {
                 title={opt.title}
                 copy={opt.copy}
                 selected={needsDesign === opt.value}
-                onSelect={() => setNeedsDesign(opt.value)}
+                onSelect={() => {
+                  choose("design", opt.value ? "needs_design" : "has_designer");
+                  setNeedsDesign(opt.value);
+                }}
               />
             ))}
           </div>
@@ -248,7 +284,13 @@ export default function QuoteBuilder() {
             max={MAX_PAGES}
             value={pageInput}
             onChange={(e) => setPageInput(e.target.value)}
-            onBlur={() => setPageInput(String(pageCount))}
+            onBlur={() => {
+              if (pageCount !== lastPages.current) {
+                lastPages.current = pageCount;
+                choose("pages", pageCount);
+              }
+              setPageInput(String(pageCount));
+            }}
             className={inputClass}
           />
         </div>
@@ -283,7 +325,10 @@ export default function QuoteBuilder() {
               <input
                 type="checkbox"
                 checked={analytics}
-                onChange={(e) => setAnalytics(e.target.checked)}
+                onChange={(e) => {
+                  choose("support_analytics", e.target.checked);
+                  setAnalytics(e.target.checked);
+                }}
                 className="h-4 w-4 accent-cyan-400"
               />
               Traffic &amp; visitor analytics
@@ -292,7 +337,10 @@ export default function QuoteBuilder() {
               <input
                 type="checkbox"
                 checked={seo}
-                onChange={(e) => setSeo(e.target.checked)}
+                onChange={(e) => {
+                  choose("support_seo", e.target.checked);
+                  setSeo(e.target.checked);
+                }}
                 className="h-4 w-4 accent-cyan-400"
               />
               Ongoing SEO updates
@@ -305,9 +353,10 @@ export default function QuoteBuilder() {
             <select
               id="maintenance"
               value={maintenanceHours}
-              onChange={(e) =>
-                setMaintenanceHours(Number(e.target.value) as MaintenanceHours)
-              }
+              onChange={(e) => {
+                choose("maintenance_hours", Number(e.target.value));
+                setMaintenanceHours(Number(e.target.value) as MaintenanceHours);
+              }}
               className={inputClass}>
               {MAINTENANCE_HOURS.map((h) => (
                 <option key={h} value={h}>

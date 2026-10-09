@@ -2,6 +2,7 @@ import { client } from "@/src/sanity/client";
 import SectionHeader from "./components/SectionHeader";
 import { Reveal, RevealGroup, RevealItem } from "./components/Reveal";
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import Image from "next/image";
 
 export const metadata = {
@@ -70,10 +71,10 @@ export default async function Home() {
             </p>
           </Reveal>
           <Reveal trigger="load" delay={0.2} className="mt-8 flex flex-wrap gap-4">
-            <Link href="/quote" className="btn btn-primary">
+            <Link href="/quote" className="btn btn-primary" {...ev("cta_click", { label: "get_estimate", location: "home_hero", destination: "quote" })}>
               Get an Estimate
             </Link>
-            <Link href="/work" className="btn">
+            <Link href="/work" className="btn" {...ev("cta_click", { label: "case_studies", location: "home_hero", destination: "work" })}>
               Case Studies
             </Link>
           </Reveal>
@@ -99,6 +100,7 @@ export default async function Home() {
             <RevealItem key={p.slug}>
             <Link
               href={`/work/${p.slug}`}
+              {...ev("project_card_click", { slug: p.slug, location: "home_featured" })}
               className="panel brackets lift rounded-md p-4 group block h-full focus:outline-none focus-visible:ring-2 focus-visible:ring-cyan-400">
               <div
                 className="relative aspect-video w-full mb-3 bg-slate-800/40 rounded-sm overflow-hidden"
@@ -130,7 +132,7 @@ export default async function Home() {
           ))}
         </RevealGroup>
         <div className="mt-8">
-          <Link href="/work" className="text-cyan-300 text-sm hover:underline">
+          <Link href="/work" className="text-cyan-300 text-sm hover:underline" {...ev("section_link_click", { label: "all_case_studies", location: "home" })}>
             All case studies →
           </Link>
         </div>
@@ -169,7 +171,7 @@ export default async function Home() {
           </RevealItem>
         </RevealGroup>
         <div className="mt-8">
-          <Link href="/services" className="text-cyan-300 text-sm hover:underline">
+          <Link href="/services" className="text-cyan-300 text-sm hover:underline" {...ev("section_link_click", { label: "all_services", location: "home" })}>
             All Services →
           </Link>
         </div>
@@ -199,7 +201,7 @@ export default async function Home() {
               technical precision with thoughtful design.
             </p>
             <p>
-              <Link href="/about" className="text-cyan-300 underline">
+              <Link href="/about" className="text-cyan-300 underline" {...ev("section_link_click", { label: "more_about_me", location: "home" })}>
                 More about me →
               </Link>
             </p>

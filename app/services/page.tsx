@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import { RevealGroup, RevealItem } from "@/app/components/Reveal";
 export const metadata = {
   title: "Services: Web Development, WordPress, Next.js, SEO",
@@ -131,7 +132,7 @@ export default function ServicesPage(){
             </ul>
             <div className="flex items-center justify-between text-[11px] text-slate-400 mt-auto pt-2 border-t border-cyan-500/20">
               <span>{s.timeline}</span>
-              <Link href="/contact" className="text-cyan-300 hover:underline" aria-label={`Let's Talk about ${s.title}`}>Let&apos;s Talk →</Link>
+              <Link href="/contact" className="text-cyan-300 hover:underline" {...ev("service_cta_click", { service: s.title, destination: "contact" })} aria-label={`Let's Talk about ${s.title}`}>Let&apos;s Talk →</Link>
             </div>
           </RevealItem>
         ))}
@@ -139,8 +140,8 @@ export default function ServicesPage(){
       <section className="panel rounded-md p-10 text-center space-y-4">
         <h2 className="font-display tracking-wide text-lg">Have a mission in mind?</h2>
         <div className="flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/quote" className="btn btn-primary">Get an Estimate</Link>
-          <Link href="/contact" className="btn">Let&apos;s Talk</Link>
+          <Link href="/quote" className="btn btn-primary" {...ev("cta_click", { label: "get_estimate", location: "services", destination: "quote" })}>Get an Estimate</Link>
+          <Link href="/contact" className="btn" {...ev("cta_click", { label: "lets_talk", location: "services", destination: "contact" })}>Let&apos;s Talk</Link>
         </div>
       </section>
     </div>

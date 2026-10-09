@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { ev } from "@/lib/analytics";
 import SectionHeader from "@/app/components/SectionHeader";
 import { Reveal, RevealGroup, RevealItem } from "@/app/components/Reveal";
 
@@ -186,10 +187,10 @@ export default function AboutPage() {
             Get a ballpark in a couple of minutes, or tell me about your project directly.
           </p>
           <div className="flex items-center justify-center gap-3 flex-wrap">
-            <Link href="/quote" className="btn btn-primary">
+            <Link href="/quote" className="btn btn-primary" {...ev("cta_click", { label: "get_estimate", location: "about", destination: "quote" })}>
               Get an Estimate
             </Link>
-            <Link href="/contact" className="btn">
+            <Link href="/contact" className="btn" {...ev("cta_click", { label: "lets_talk", location: "about", destination: "contact" })}>
               Let&apos;s Talk
             </Link>
           </div>
@@ -229,6 +230,7 @@ export default function AboutPage() {
                 rel="noopener noreferrer"
                 className="btn text-xs"
                 aria-label="Buy Ripley a treat (opens Stripe in new tab)"
+                {...ev("donate_click", { cat: "ripley" })}
               >
                 Buy Ripley a Treat ↗
               </a>
@@ -261,6 +263,7 @@ export default function AboutPage() {
                 rel="noopener noreferrer"
                 className="btn text-xs"
                 aria-label="Buy Void a treat (opens Stripe in new tab)"
+                {...ev("donate_click", { cat: "void" })}
               >
                 Buy Void a Treat ↗
               </a>

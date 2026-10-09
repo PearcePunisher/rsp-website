@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
+import { ev } from '@/lib/analytics';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
@@ -61,7 +62,7 @@ export default function PrivacyPage() {
         <p className="text-xs text-slate-400 mt-8">Last updated: {EFFECTIVE_DATE}</p>
       </section>
       <div className="pt-4 border-t border-cyan-500/20">
-        <Link href="/" className="text-xs text-cyan-300 hover:underline">← Home</Link>
+        <Link href="/" className="text-xs text-cyan-300 hover:underline" {...ev("section_link_click", { label: "home", location: "privacy" })}>← Home</Link>
       </div>
     </article>
   );

@@ -1,5 +1,6 @@
 import { Metadata } from 'next';
 import Link from 'next/link';
+import { ev } from "@/lib/analytics";
 
 export const metadata: Metadata = {
   title: 'Thank You',
@@ -25,13 +26,13 @@ export default async function ThankYouPage({ searchParams }: { searchParams: Pro
       <section className="panel rounded-md p-6 space-y-4 text-sm">
         <h2 className="font-display tracking-wide text-cyan-300 text-base">Direct Channels</h2>
         <ul className="space-y-2">
-          <li><span className="text-slate-400">Email:</span> <a href="mailto:riley@roguesalad.co" className="text-cyan-300 underline">riley@roguesalad.co</a></li>
-          <li><span className="text-slate-400">Site:</span> <Link href="/work" className="text-cyan-300 underline">Case Studies</Link></li>
-          <li><span className="text-slate-400">Services:</span> <Link href="/services" className="text-cyan-300 underline">What I Offer</Link></li>
+          <li><span className="text-slate-400">Email:</span> <a href="mailto:riley@roguesalad.co" className="text-cyan-300 underline" {...ev("mailto_click", { location: "thank_you" })}>riley@roguesalad.co</a></li>
+          <li><span className="text-slate-400">Site:</span> <Link href="/work" className="text-cyan-300 underline" {...ev("section_link_click", { label: "case_studies", location: "thank_you" })}>Case Studies</Link></li>
+          <li><span className="text-slate-400">Services:</span> <Link href="/services" className="text-cyan-300 underline" {...ev("section_link_click", { label: "services", location: "thank_you" })}>What I Offer</Link></li>
         </ul>
         <p className="text-[11px] text-slate-400">If you don&apos;t see a reply, check spam or email me directly. Appreciate the reach-out.</p>
       </section>
-      <div className="text-xs text-slate-400">Return to <Link href="/" className="text-cyan-300 underline">home</Link>.</div>
+      <div className="text-xs text-slate-400">Return to <Link href="/" className="text-cyan-300 underline" {...ev("section_link_click", { label: "home", location: "thank_you" })}>home</Link>.</div>
     </div>
   );
 }
